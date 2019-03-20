@@ -11,7 +11,7 @@ public class ImportConfig
 	private static InputStream is = null;
 	
 	
-	protected static void loadConfig()
+	protected static void openConfig()
 	{
 		
 		try
@@ -61,12 +61,48 @@ public class ImportConfig
 	
 	
 	
+	protected static String getCourseEquivPath()
+	{
+		
+		try
+		{
+			return prop.getProperty("course_equiv_path");
+		}
+		catch (Exception e)
+		{
+			System.out.println("Error: Could not find Course Equivalency List. ");
+			return null;
+		}
+		
+	}
+	
+	
+	
+	protected static String getTranscriptPath()
+	{
+		
+		try
+		{
+			return prop.getProperty("transcript_path");
+		}
+		catch (Exception e)
+		{
+			System.out.println("Error: Could not find Transcript folder. ");
+			return null;
+		}
+		
+	}
+	
+	
+	
 	protected static void closeConfig()
 	{
 		
 		try
 		{	
+			
 			is.close();
+			
 		}
 		catch(Exception e)
 		{
