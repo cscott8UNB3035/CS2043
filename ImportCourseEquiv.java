@@ -23,16 +23,12 @@ public class ImportCourseEquiv
 		//open excel file
 		try 
 		{
-			//fis = new FileInputStream(new File(filepath + "\\course_equivalency_list.xlsx"));
 			fis = new FileInputStream(filepath + "\\course_equivalency_list.xlsx");
 			
 			workbook = new XSSFWorkbook(fis);
 			spreadsheet = workbook.getSheetAt(0);
 			
-			//if(file.isFile() && file.exists())
-			//{
-				System.out.println("Success: Course Equivalency List Opened.");
-			//}
+			System.out.println("Success: Course Equivalency List Opened.");
 		}
 		catch (Exception e)
 		{
@@ -68,20 +64,6 @@ public class ImportCourseEquiv
 		catch (Exception e)
 		{
 			System.out.println("Error: Could not read Course Equivalency List.");
-		}
-	}
-	
-	
-	
-	protected static void addCourseEquiv()
-	{
-		try
-		{
-			
-		}
-		catch(Exception e)
-		{
-			
 		}
 	}
 	
