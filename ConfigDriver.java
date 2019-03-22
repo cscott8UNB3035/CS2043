@@ -6,11 +6,18 @@ public class ConfigDriver
 	public static void main(String[] args)
 	{
 		
-		ImportConfig.openConfig();
+		Configuration.openConfig();
 		
-		ImportConfig.printConfig();
+		Configuration.printConfig();
 		
-		ImportConfig.closeConfig();
+		
+		Configuration.openCourseEquiv(Configuration.getCourseEquivPath());
+		
+		Configuration.printCourseEquiv();
+		
+		
+		Configuration.closeCourseEquiv();
+		Configuration.closeConfig();
 		
 	}
 	
