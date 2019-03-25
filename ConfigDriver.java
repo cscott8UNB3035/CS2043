@@ -15,6 +15,10 @@ public class ConfigDriver
 		
 		Configuration.printCourseEquiv();
 		
+		Configuration.writeToCourseEquiv(Configuration.getCourseEquivPath());
+		
+		Configuration.printCourseEquiv();
+		
 		
 		Configuration.closeCourseEquiv();
 		Configuration.closeConfig();
