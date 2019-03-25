@@ -1,3 +1,4 @@
+package team_project;
 
 public class transcript {
 	
@@ -8,7 +9,7 @@ public class transcript {
 	private String creditHour;
 	private String term;
 	
-	public transcript(String courseCode, String sectionCode, String title, String letterGrade, String creditHour, String term) {
+	protected transcript(String courseCode, String sectionCode, String title, String letterGrade, String creditHour, String term) {
 		super();
 		this.courseCode = courseCode;
 		this.sectionCode = sectionCode;
@@ -18,53 +19,51 @@ public class transcript {
 		this.term = term;
 	}
 
-	public String getCourseCode() {
+	protected String getCourseCode() {
 		return courseCode;
 	}
 
-	public void setCourseCode(String courseCode) {
+	protected void setCourseCode(String courseCode) {
 		this.courseCode = courseCode;
 	}
 
-	public String getSectionCode() {
+	protected String getSectionCode() {
 		return sectionCode;
 	}
 
-	public void setSectionCode(String sectionCode) {
+	protected void setSectionCode(String sectionCode) {
 		this.sectionCode = sectionCode;
 	}
 
-	public String getTitle() {
+	protected String getTitle() {
 		return title;
 	}
 
-	public void setTitle(String title) {
+	protected void setTitle(String title) {
 		this.title = title;
 	}
 
-	public String getLetterGrade() {
+	protected String getLetterGrade() {
 		return letterGrade;
 	}
 
-	public void setLetterGrade(String letterGrade) {
+	protected void setLetterGrade(String letterGrade) {
 		this.letterGrade = letterGrade;
 	}
 
-	public String getCreditHour() {
+	protected String getCreditHour() {
 		return creditHour;
 	}
 
-	public void setCreditHour(String creditHour) {
+	protected void setCreditHour(String creditHour) {
 		this.creditHour = creditHour;
 	}
 
-	public String getTerm() {
+	protected String getTerm() {
 		return term;
 	}
 
-	public void setTerm(String term) {
+	protected void setTerm(String term) {
 		this.term = term;
 	}
-	
-	
 }
