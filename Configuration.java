@@ -2,19 +2,24 @@ package team_project;
 
 import java.util.Iterator;
 import java.util.Properties;
+import java.util.Scanner;
 
 import java.io.InputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class Configuration
 {
+	private static final Scanner SCAN = new Scanner(System.in);
+	
 	// ----- Configuration File Variables -----
 	private static InputStream is = null;
 	private static Properties prop = new Properties();
@@ -23,9 +28,11 @@ public class Configuration
 	
 	// ----- Excel File Variables -----
 	private static FileInputStream fis;
+	private static FileOutputStream fos;
 	private static XSSFWorkbook workbook;
 	private static XSSFSheet spreadsheet;
 	private static XSSFRow row;
+	private static XSSFCell cell;
 	
 	
 	
@@ -184,6 +191,51 @@ public class Configuration
 			System.out.println("Error: Could not read Course Equivalency List.");
 		}
 		
+	}
+	
+	
+	protected static void writeToCourseEquiv(String filepath)
+	{
+		try
+		{
+			boolean done = false;
+			fos = new FileOutputStream(filepath + "\\course_equivalency_list.xlsx");
+			Iterator < Row > rowIterator = spreadsheet.iterator();
+			int currentColumn = spreadsheet.getRow(0).getLastCellNum();
+			
+			do
+			{
+				System.out.print("\n1. Add new Equivalency\n2. Done\n\nEnter choice: ");
+				int choice = SCAN.nextInt();
+				SCAN.nextLine();
+				
+				switch(choice)
+				{
+					case 1:
+						System.out.print("Enter course code: ");
+						String courseCode = SCAN.nextLine();
+						
+						row = (XSSFRow) rowIterator.next();
+						cell = row.createCell(currentColumn);
+						cell.setCellValue(courseCode);
+						
+						break;
+						
+					case 2:
+						done = true;
+						break;
+				}
+				
+			} while (!done);
+			
+			workbook.write(fos);
+			
+			fos.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println("Error: Could not write to Course Equivalency List");
+		}
 	}
 	
 	
