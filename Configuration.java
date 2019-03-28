@@ -91,7 +91,7 @@ public class Configuration
 		
 		try
 		{
-			return prop.getProperty("course_equiv_path");
+			return prop.getProperty("course_equiv_path") + "course_equivalency_list.xlsx";
 		}
 		catch (Exception e)
 		{
@@ -156,7 +156,7 @@ public class Configuration
 	}
 	
 	
-	protected static void printCourseEquiv()
+	/*protected static void printCourseEquiv()
 	{
 		
 		try 
@@ -191,7 +191,7 @@ public class Configuration
 			System.out.println("Error: Could not read Course Equivalency List.");
 		}
 		
-	}
+	}*/
 	
 	
 	protected static void writeToCourseEquiv(String filepath)
@@ -244,6 +244,7 @@ public class Configuration
 		
 		try
 		{	
+			workbook.close();
 			fis.close();
 		}
 		catch(Exception e)
