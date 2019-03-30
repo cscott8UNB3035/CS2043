@@ -1,6 +1,5 @@
 package team_project;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -16,6 +15,11 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.*;
 import javafx.stage.*;
+
+/*	
+ * TODO: Implement method to get data from config file and print into window.
+ * TODO: Implement methods to modify data
+ */
 
 public class ConfigGUI
 {	
@@ -36,7 +40,7 @@ public class ConfigGUI
 		}
 		catch (FileNotFoundException e)
 		{
-			System.out.println("Error: Config file not found.");
+			AlertBox.displayAlert("Error", "Configuration file does not exist.");
 		}
 		
 		try
@@ -45,7 +49,7 @@ public class ConfigGUI
 		}
 		catch (IOException e)
 		{
-			System.out.println("Error: Config could not be opened.");
+			AlertBox.displayAlert("Error", "Cannot load Configuration file.");
 		}
 		
 	}
@@ -60,7 +64,7 @@ public class ConfigGUI
 		}
 		catch (Exception e)
 		{
-			System.out.println("Error: Could not find Course Equivalency List location.");
+			AlertBox.displayAlert("Error", "Cannot find Course Equivalence path.");
 			return null;
 		}
 		
@@ -76,10 +80,24 @@ public class ConfigGUI
 		}
 		catch (Exception e)
 		{
-			System.out.println("Error: Could not find Raw Transcript location.");
+			AlertBox.displayAlert("Error", "Cannot find Transcript folder path.");
 			return null;
 		}
 		
+	}
+	
+	
+	protected static String getOutputFolderPath()
+	{
+		try
+		{
+			return prop.getProperty("output_path");
+		}
+		catch (Exception e)
+		{
+			AlertBox.displayAlert("Error", "Cannot find Output folder path.");
+			return null;
+		}
 	}
 	
 	
@@ -92,7 +110,7 @@ public class ConfigGUI
 		}
 		catch(Exception e)
 		{
-			System.out.println("Error: Exception when closing config file.");
+			AlertBox.displayAlert("Error", "Error while closing configuration file.");
 		}
 		
 	}

@@ -54,7 +54,7 @@ public class SystemGUI extends Application
 		process.setMaxWidth(130);
 		process.setOnAction(e ->
 		{
-			//Display menu for processing data
+			ProcessInfoGUI.showDataProcessor();
 		});
 		
 		
@@ -115,6 +115,7 @@ public class SystemGUI extends Application
 		menu.setTop(topText);
 		menu.setCenter(buttons);
 		menu.setBottom(bottomButtons);
+		
 		
 		
 		scene1 = new Scene(menu, 280, 400);

@@ -1,8 +1,6 @@
 package team_project;
 
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,6 +22,10 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+/*
+ * TODO: Implement a method to shift all columns to the right after a column deletion.
+ */
 
 public class CourseEquivGUI
 {	
@@ -50,7 +52,7 @@ public class CourseEquivGUI
 		}
 		catch (Exception e)
 		{
-			//displayAlert(Error: cant find course equiv)
+			AlertBox.displayAlert("Error", "Cannot find Course Equivalence file.");
 		}
 		
 	}
@@ -67,7 +69,7 @@ public class CourseEquivGUI
 		}
 		catch(Exception e)
 		{
-			//displayAlert(Error: cant close Input Stream)
+			AlertBox.displayAlert("Error", "Error while closing Course Equivalence file.");
 		}
 		
 	}
@@ -148,7 +150,7 @@ public class CourseEquivGUI
 		
 		window.setOnShowing(e -> 
 		{
-			//updateCourseEquivList(data);
+			updateCourseEquivList(data);
 		});
 		
 		window.setScene(scene);
@@ -195,72 +197,79 @@ public class CourseEquivGUI
 		{
 			final int x = i;
 			
-			//if(spreadsheet.getRow(0).getCell(i).getStringCellValue() != "")
-			//{
 			
-				for(int j=0; j<=maxRow+1; j++)
-				{
-					try
-					{	
-						if(j==0)
+			
+			for(int j=0; j<=maxRow+1; j++)
+			{
+				
+				try
+				{	
+					if(j==0)
+					{
+						
+						Button temp = new Button("X");
+						temp.setOnAction(e -> 
 						{
-							Button temp = new Button("X");
-							temp.setOnAction(e -> 
+							int currentColumn = x;
+							openCourseEquiv(ConfigGUI.getCourseEquivPath());
+							
+							
+							for(int k=0; k<=maxRow; k++)
 							{
-								int currentColumn = x;
-								openCourseEquiv(ConfigGUI.getCourseEquivPath());
-								
-								for(int k=0; k<=maxRow; k++)
-								{
-									try
-									{
-										XSSFCell cellToRemove = spreadsheet.getRow(k).getCell(currentColumn);
-										spreadsheet.getRow(k).removeCell(cellToRemove);
-									}
-									catch(NullPointerException np)
-									{
-										break;
-									}
-										
-								}
 								
 								try
 								{
-									fos = new FileOutputStream(ConfigGUI.getCourseEquivPath());
-									workbook.write(fos);
-									fos.close();
+									XSSFCell cellToRemove = spreadsheet.getRow(k).getCell(currentColumn);
+									spreadsheet.getRow(k).removeCell(cellToRemove);
 								}
-								catch(Exception exc)
+								catch(NullPointerException np)
 								{
-									//showAlert(error: can't delete cells)
+									break;
 								}
-								
-								closeCourseEquiv();
-								updateCourseEquivList(sp);
-							});
+										
+							}
 							
-							GridPane.setConstraints(temp, j, i+1);
-							excel.getChildren().add(temp);
-						}
-						else
-						{
-							Label temp = new Label(spreadsheet.getRow(j-1).getCell(i).getStringCellValue());
 							
-							GridPane.setConstraints(temp, j, i+1);
-							excel.getChildren().add(temp);
-						}
+							try
+							{
+								fos = new FileOutputStream(ConfigGUI.getCourseEquivPath());
+								workbook.write(fos);
+								fos.close();
+							}
+							catch(Exception exc)
+							{
+								AlertBox.displayAlert("Error", "Cannot remove Equivalence definition.");
+							}
+							
+							
+							closeCourseEquiv();
+							
+							updateCourseEquivList(sp);
+						});		//end button event handler definition
+						
+						
+						GridPane.setConstraints(temp, j, i+1);
+						excel.getChildren().add(temp);
 					}
-					catch (NullPointerException e)
+					else
 					{
-						break;
+						Label temp = new Label(spreadsheet.getRow(j-1).getCell(i).getStringCellValue());
+						
+						GridPane.setConstraints(temp, j, i+1);
+						excel.getChildren().add(temp);
 					}
+					
+				}
+				catch (NullPointerException e)
+				{
+					break;
 				}
 				
+			}	//end inner for-loop
 				
-			//} //end if stmt
+				
 			
-		}
-		
+		}	//end outer for-loop
 		
 		
 		sp.setContent(excel);
@@ -306,7 +315,7 @@ public class CourseEquivGUI
 			}
 			catch(Exception exc)
 			{
-				
+				AlertBox.displayAlert("Error", "Cannot save Course Equivalence file.");
 			}
 			
 			closeCourseEquiv();
@@ -419,7 +428,6 @@ public class CourseEquivGUI
 			window2.setTitle("Configuration");
 			window2.showAndWait();
 		}
-		
 	
 	
 }

@@ -11,26 +11,21 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-/*
- * TODO: Implement method to add courses to master list.
- * TODO: Implement method to put master list into the window.
- */
-
-public class MasterListGUI
+public class ProcessInfoGUI
 {
 
-	protected static void showMasterList()
+	
+	protected static void showDataProcessor()
 	{
 		ConfigGUI.openConfig();
 		
 		Stage window = new Stage();
 		Scene scene;
 		
-		// ----- Config Menu -----
+		// ----- Info Processor Menu -----
 		
-		Text masterList = new Text("Master Course List");
-		masterList.setFont(Font.font(20));
-		
+		Text processData = new Text("Process Data");
+		processData.setFont(Font.font(20));
 		
 		Button back = new Button("Back");
 		back.setOnAction(e ->
@@ -40,11 +35,12 @@ public class MasterListGUI
 		
 		
 		
+		
 		HBox title = new HBox();
 		title.setPadding(new Insets(10,10,10,10));
 		title.setSpacing(10);
 		title.setAlignment(Pos.CENTER);
-		title.getChildren().addAll(masterList);
+		title.getChildren().addAll(processData);
 		
 		
 		HBox bottomButtons = new HBox();
@@ -58,10 +54,9 @@ public class MasterListGUI
 		layout.setTop(title);
 		layout.setBottom(bottomButtons);
 		
-		
 		scene = new Scene(layout, 250, 200);
 		
-		// -------------------------------------
+		// -------------------------------
 		
 		
 		
@@ -78,7 +73,7 @@ public class MasterListGUI
 		});
 		
 		window.setScene(scene);
-		window.setTitle("Master Course List");
+		window.setTitle("Data Processor");
 		window.show();
 		
 		// ------------------------------------
