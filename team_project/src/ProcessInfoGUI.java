@@ -27,6 +27,21 @@ public class ProcessInfoGUI
 		Text processData = new Text("Process Data");
 		processData.setFont(Font.font(20));
 		
+		
+		Button start = new Button("Process Transcripts");
+		start.setMinWidth(130);
+		start.setMinHeight(40);
+		start.setMaxWidth(130);
+		start.setMaxHeight(40);
+		start.setOnAction(e ->
+		{
+			
+			ExcelReader.transcriptCollector();
+			System.out.println("done");
+			ExcelReader.closeExcel();
+		});
+		
+		
 		Button back = new Button("Back");
 		back.setOnAction(e ->
 		{
@@ -34,6 +49,12 @@ public class ProcessInfoGUI
 		});
 		
 		
+		
+		VBox buttons = new VBox();
+		buttons.setPadding(new Insets(10,10,10,10));
+		buttons.setSpacing(10);
+		buttons.setAlignment(Pos.CENTER);
+		buttons.getChildren().addAll(start);
 		
 		
 		HBox title = new HBox();
@@ -52,6 +73,7 @@ public class ProcessInfoGUI
 		
 		BorderPane layout = new BorderPane();
 		layout.setTop(title);
+		layout.setCenter(buttons);
 		layout.setBottom(bottomButtons);
 		
 		scene = new Scene(layout, 250, 200);
