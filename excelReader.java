@@ -1,44 +1,63 @@
 package team_project;
 
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
-public class excelReader{
+public class ExcelReader{
 	
-	private ArrayList<Transcript> TranscriptList;
+	private static ArrayList<Transcript> TranscriptList = new ArrayList<Transcript>();
+	static FileInputStream is;
+	static XSSFWorkbook wb;
+	static XSSFSheet sheet;
+	XSSFRow row;
+	XSSFCell cell;
 	
-	try {
-		POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(file));
-		XSSFWorkbook wb = new HSSFWorkbook(fs);
-		XSSFSheet sheet = wb.getSheetAt(0);
-		XSSFRow row;
-		XSSFCell cell;
-	}catch(FileNotFoundException e) {System.out.println("Error: Could not find specified file")}
 	
 	protected static void transcriptCollector() {
-		try{
-			for(int i = 0; i <= sheet.getMaxRow(); i++) {
-				cell = 0;
-				courseCode = sheet.getRow(i).getCell(cell).getStringCellValue();
+		
+		try {
+			is = new FileInputStream(ConfigGUI.getTranscriptFolderPath() + "exScript.xlsx");
+			wb = new XSSFWorkbook(is);
+			sheet = wb.getSheetAt(0);
+		}catch(FileNotFoundException e) {System.out.println("Error: Could not find specified file.");} 
+		catch (IOException e) {System.out.println("Error: Could not find workbook.");}
+		
+		
+		for(int i = 0; i <= sheet.getLastRowNum(); i++) {
+			
+			try{
+				int cell = 0;
+				
+				String courseCode = sheet.getRow(i).getCell(cell).getStringCellValue();
 				cell++;
-				sectionCode =  sheet.getRow(i).getCell(cell).getStringCellValue();;
+				String sectionCode = sheet.getRow(i).getCell(cell).getStringCellValue();
 				cell++;
-				title =  sheet.getRow(i).getCell(cell).getStringCellValue();;
+				String title = sheet.getRow(i).getCell(cell).getStringCellValue();
 				cell++;
-				letterGrade =  sheet.getRow(i).getCell(cell).getStringCellValue();;
+				String letterGrade = sheet.getRow(i).getCell(cell).getStringCellValue();
 				cell++;
-				creditHour =  sheet.getRow(i).getCell(cell).getStringCellValue();;
+				double creditHour = sheet.getRow(i).getCell(cell).getNumericCellValue();
 				cell++;
-				term =  sheet.getRow(i).getCell(cell).getStringCellValue();;
+				String term = sheet.getRow(i).getCell(cell).getStringCellValue();
+				
 				Transcript transcript = new Transcript(courseCode, sectionCode, title, letterGrade, creditHour, term);
+				
 				TranscriptList.add(transcript);
-			}
-		}catch(NullPointerException e){System.out.println("Error: Could not read cell data.");break;}
+				
+				System.out.println("line done");
+				
+			}catch(NullPointerException e){System.out.println("Error: End of file."); break;}
+		}
+			
+		
 				
 	}
 	
@@ -46,11 +65,15 @@ public class excelReader{
 		
 		try{
 			
-			fis.close();
+			wb.close();
+			is.close();
 			
 		}catch(Exception e){
 			
 			System.out.println("Error: Input stream could not be closed. ");
 		}
 	}
+	
+	
+	
 }

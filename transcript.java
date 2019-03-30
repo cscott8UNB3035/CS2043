@@ -1,16 +1,15 @@
 package team_project;
 
-public class transcript {
+public class Transcript {
 	
 	private String courseCode;
 	private String sectionCode;
 	private String title;
 	private String letterGrade;
-	private String creditHour;
+	private double creditHour;
 	private String term;
 	
-	protected transcript(String courseCode, String sectionCode, String title, String letterGrade, String creditHour, String term) {
-		super();
+	protected Transcript(String courseCode, String sectionCode, String title, String letterGrade, double creditHour, String term) {
 		this.courseCode = courseCode;
 		this.sectionCode = sectionCode;
 		this.title = title;
@@ -51,11 +50,11 @@ public class transcript {
 		this.letterGrade = letterGrade;
 	}
 
-	protected String getCreditHour() {
+	protected double getCreditHour() {
 		return creditHour;
 	}
 
-	protected void setCreditHour(String creditHour) {
+	protected void setCreditHour(double creditHour) {
 		this.creditHour = creditHour;
 	}
 
