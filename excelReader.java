@@ -10,47 +10,36 @@ import java.io.FileInputStream;
 
 public class excelReader{
 	
-	private static FileInputStream fis;
-	private static XSSFWorkbook workbook;
-	private static XSSFSheet spreadsheet;
-	private static XSSFRow row;
+	private ArrayList<Transcript> TranscriptList;
 	
-	protected static void openExcel(String filepath) {
-		
-		try {
-			
-			fis = new FileInputStream(filepath);
-			workbook = new XSSFWorkbook(fis);
-			spreadsheet = workbook.getSheetAt(0);
-			System.out.println("Success: Excel Document Opened.");
-			
-		}catch (Exception e){
-			
-			System.out.println("Error: Excel Document not found.");}
-	}
+	try {
+		POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(file));
+		XSSFWorkbook wb = new HSSFWorkbook(fs);
+		XSSFSheet sheet = wb.getSheetAt(0);
+		XSSFRow row;
+		XSSFCell cell;
+	}catch(FileNotFoundException e) {System.out.println("Error: Could not find specified file")}
 	
-	protected static void printExcelData() {
+	protected static void transcriptCollector() {
 		try{
-			int currentCell;
-			Iterator < Row > rowIterator = spreadsheet.iterator();
-			while(rowIterator.hasNext()){
-				currentCell = 0;
-				while (currentCell < 6){
+			for(int i = 0; i <= sheet.getMaxRow(); i++) {
+				cell = 0;
+				courseCode = sheet.getRow(i).getCell(cell).getStringCellValue();
+				cell++;
+				sectionCode =  sheet.getRow(i).getCell(cell).getStringCellValue();;
+				cell++;
+				title =  sheet.getRow(i).getCell(cell).getStringCellValue();;
+				cell++;
+				letterGrade =  sheet.getRow(i).getCell(cell).getStringCellValue();;
+				cell++;
+				creditHour =  sheet.getRow(i).getCell(cell).getStringCellValue();;
+				cell++;
+				term =  sheet.getRow(i).getCell(cell).getStringCellValue();;
+				Transcript transcript = new Transcript(courseCode, sectionCode, title, letterGrade, creditHour, term);
+				TranscriptList.add(transcript);
+			}
+		}catch(NullPointerException e){System.out.println("Error: Could not read cell data.");break;}
 				
-					try{
-						System.out.print(row.getCell(currentCell).toString() + "\t");							
-					
-					}catch(NullPointerException e){System.out.println("Error: Could not read cell data.");break;}
-					currentCell++;
-				
-				}//end of inner while loop
-				System.out.println();
-				try{
-					row = (XSSFRow) rowIterator.next();
-				}catch(NullPointerException e){System.out.println("Error: Could not find next row.");break;}
-				
-			}//end of outer while loop
-		}catch (Exception e){System.out.println("Error: Could not read excel file.");}
 	}
 	
 	protected static void closeExcel() {
