@@ -12,7 +12,7 @@ import javafx.stage.*;
 public class SystemGUI extends Application
 {
 	static Stage window;
-	Scene scene1, scene2;
+	Scene scene1;
 	
 	
 	public static void main(String[] args)
@@ -36,7 +36,7 @@ public class SystemGUI extends Application
 		config.setMaxWidth(130);
 		config.setOnAction(e ->
 		{
-			
+			ConfigGUI.showConfig();
 		});
 		
 		
@@ -45,14 +45,14 @@ public class SystemGUI extends Application
 		equiv.setMaxWidth(130);
 		equiv.setOnAction(e ->
 		{
-			//Display list of course equivalences, and options to add/remove
+			CourseEquivGUI.showCourseEquiv();
 		});
 		
 		
 		Button process = new Button("Process Data");
 		process.setMinWidth(130);
 		process.setMaxWidth(130);
-		equiv.setOnAction(e ->
+		process.setOnAction(e ->
 		{
 			//Display menu for processing data
 		});
@@ -61,18 +61,18 @@ public class SystemGUI extends Application
 		Button stats = new Button("Generate Statistics");
 		stats.setMinWidth(130);
 		stats.setMaxWidth(130);
-		equiv.setOnAction(e ->
+		stats.setOnAction(e ->
 		{
-			//Display menu for generating statistics
+			StatisticsGUI.showStatistics();
 		});
 		
 		
 		Button masterList = new Button("Master Course List");
 		masterList.setMinWidth(130);
 		masterList.setMaxWidth(130);
-		equiv.setOnAction(e ->
+		masterList.setOnAction(e ->
 		{
-			//Display list of course equivalences, and options to add/remove
+			MasterListGUI.showMasterList();
 		});
 		
 		
