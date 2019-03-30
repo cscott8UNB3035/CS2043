@@ -15,17 +15,10 @@ import javafx.scene.text.Text;
 import javafx.scene.*;
 import javafx.stage.*;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
-/*
- * TODO: Implement a method to shift all columns to the right after a column deletion.
- */
 
 public class CourseEquivGUI
 {	
@@ -197,75 +190,84 @@ public class CourseEquivGUI
 		{
 			final int x = i;
 			
-			
-			
-			for(int j=0; j<=maxRow+1; j++)
+			try
 			{
+				String a = spreadsheet.getRow(0).getCell(i).getStringCellValue();
 				
-				try
-				{	
-					if(j==0)
-					{
-						
-						Button temp = new Button("X");
-						temp.setOnAction(e -> 
+				for(int j=0; j<=maxRow+1; j++)
+				{
+					
+					try
+					{	
+						if(j==0)
 						{
-							int currentColumn = x;
-							openCourseEquiv(ConfigGUI.getCourseEquivPath());
 							
-							
-							for(int k=0; k<=maxRow; k++)
+							Button temp = new Button("X");
+							temp.setOnAction(e -> 
 							{
+								int currentColumn = x;
+								openCourseEquiv(ConfigGUI.getCourseEquivPath());
+								
+								
+								for(int k=0; k<=maxRow; k++)
+								{
+									
+									try
+									{
+										XSSFCell cellToRemove = spreadsheet.getRow(k).getCell(currentColumn);
+										spreadsheet.getRow(k).removeCell(cellToRemove);
+									}
+									catch(NullPointerException np)
+									{
+										break;
+									}
+											
+								}
+								
 								
 								try
 								{
-									XSSFCell cellToRemove = spreadsheet.getRow(k).getCell(currentColumn);
-									spreadsheet.getRow(k).removeCell(cellToRemove);
+									fos = new FileOutputStream(ConfigGUI.getCourseEquivPath());
+									workbook.write(fos);
+									fos.close();
 								}
-								catch(NullPointerException np)
+								catch(Exception exc)
 								{
-									break;
+									AlertBox.displayAlert("Error", "Cannot remove Equivalence definition.");
 								}
-										
-							}
+								
+								
+								closeCourseEquiv();
+								
+								updateCourseEquivList(sp);
+							});		//end button event handler definition
 							
 							
-							try
-							{
-								fos = new FileOutputStream(ConfigGUI.getCourseEquivPath());
-								workbook.write(fos);
-								fos.close();
-							}
-							catch(Exception exc)
-							{
-								AlertBox.displayAlert("Error", "Cannot remove Equivalence definition.");
-							}
+							GridPane.setConstraints(temp, j, i+1);
+							excel.getChildren().add(temp);
+						}
+						else
+						{
+							Label temp = new Label(spreadsheet.getRow(j-1).getCell(i).getStringCellValue());
 							
-							
-							closeCourseEquiv();
-							
-							updateCourseEquivList(sp);
-						});		//end button event handler definition
+							GridPane.setConstraints(temp, j, i+1);
+							excel.getChildren().add(temp);
+						}
 						
-						
-						GridPane.setConstraints(temp, j, i+1);
-						excel.getChildren().add(temp);
 					}
-					else
+					catch (NullPointerException e)
 					{
-						Label temp = new Label(spreadsheet.getRow(j-1).getCell(i).getStringCellValue());
-						
-						GridPane.setConstraints(temp, j, i+1);
-						excel.getChildren().add(temp);
+						break;
 					}
 					
-				}
-				catch (NullPointerException e)
-				{
-					break;
-				}
+				}	//end inner for-loop
 				
-			}	//end inner for-loop
+			
+			}
+			catch(NullPointerException noCell)
+			{
+				continue;
+			}
 				
 				
 			
