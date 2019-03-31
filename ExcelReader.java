@@ -11,7 +11,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class ExcelReader{
+public class ExcelReader{ 
 	
 	private static ArrayList<Transcript> TranscriptList = new ArrayList<Transcript>();
 	static FileInputStream is;
