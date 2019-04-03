@@ -4,8 +4,9 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -21,8 +22,9 @@ public class ConfirmBox
 		window.setTitle(title);
 		window.setMinWidth(250);
 		
-		Label label = new Label();
-		label.setText(message);
+		Text text = new Text();
+		text.setText(message);
+		text.setTextAlignment(TextAlignment.CENTER);
 		
 		
 		
@@ -43,7 +45,7 @@ public class ConfirmBox
 		
 		VBox layout = new VBox(10);
 		
-		layout.getChildren().addAll(label, yes, no);
+		layout.getChildren().addAll(text, yes, no);
 		layout.setAlignment(Pos.TOP_CENTER);
 		layout.setPadding(new Insets(10,10,10,10));
 		

@@ -1,8 +1,10 @@
 package team_project;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -13,11 +15,11 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.*;
 import javafx.stage.*;
 
 /*	
- * TODO: Implement method to get data from config file and print into window.
  * TODO: Implement methods to modify data
  */
 
@@ -116,6 +118,19 @@ public class ConfigGUI
 	}
 	
 	
+	protected static void createConfig()
+	{
+		try
+		{
+			
+		}
+		catch(Exception e)
+		{
+			
+		}
+	}
+	
+	
 	// ----- GUI Methods -----
 	
 	protected static void showConfig()
@@ -130,11 +145,50 @@ public class ConfigGUI
 		Text config = new Text("Configuration");
 		config.setFont(Font.font(20));
 		
+		
+		Text configText = new Text();
+		
+		
+		Button changeOutputPath = new Button("Change Output Path");
+		changeOutputPath.setMinWidth(130);
+		changeOutputPath.setMaxWidth(130);
+		changeOutputPath.setOnAction(e -> 
+		{
+			//changeOutputPath()
+			updateConfigText(configText);
+		});
+		
+		
+		Button changeCourseEquivSrc = new Button("Change Course Equivalence Source Folder");
+		changeCourseEquivSrc.setWrapText(true);
+		changeCourseEquivSrc.textAlignmentProperty().set(TextAlignment.CENTER);
+		changeCourseEquivSrc.setMinWidth(130);
+		changeCourseEquivSrc.setMaxWidth(130);
+		changeCourseEquivSrc.setOnAction(e -> 
+		{
+			//changeCourseEquivSrc()
+			updateConfigText(configText);
+		});
+		
+		
+		Button changeTranscriptSrc = new Button("Change Transcript Source Folder");
+		changeTranscriptSrc.setWrapText(true);
+		changeTranscriptSrc.textAlignmentProperty().set(TextAlignment.CENTER);
+		changeTranscriptSrc.setMinWidth(130);
+		changeTranscriptSrc.setMaxWidth(130);
+		changeTranscriptSrc.setOnAction(e -> 
+		{
+			//changeTranscriptSrc()
+			updateConfigText(configText);
+		});
+		
+		
 		Button back = new Button("Back");
 		back.setOnAction(e ->
 		{
 			window.close();
 		});
+		
 		
 		
 		HBox title = new HBox();
@@ -144,19 +198,29 @@ public class ConfigGUI
 		title.getChildren().addAll(config);
 		
 		
-		HBox bottomButtons = new HBox();
+		VBox content = new VBox();
+		content.setPadding(new Insets(10,10,10,10));
+		content.setSpacing(10);
+		content.setAlignment(Pos.CENTER);
+		content.getChildren().addAll(configText);
+		
+		
+		VBox bottomButtons = new VBox();
 		bottomButtons.setPadding(new Insets(15, 15, 15, 15));
 		bottomButtons.setSpacing(15);
 		bottomButtons.setAlignment(Pos.CENTER);
-		bottomButtons.getChildren().addAll(back);
+		bottomButtons.getChildren().addAll(changeOutputPath, changeCourseEquivSrc, changeTranscriptSrc, back);
+		
 		
 		
 		BorderPane layout = new BorderPane();
 		layout.setTop(title);
+		layout.setCenter(content);
 		layout.setBottom(bottomButtons);
 		
 		
-		scene = new Scene(layout, 250, 200);
+		
+		scene = new Scene(layout, 550, 500);
 		
 		// -------------------------------------
 		
@@ -171,7 +235,7 @@ public class ConfigGUI
 		
 		window.setOnShowing(e -> 
 		{
-			
+			updateConfigText(configText);
 		});
 		
 		window.setScene(scene);
@@ -179,6 +243,31 @@ public class ConfigGUI
 		window.show();
 		
 		// ------------------------------------
+	}
+	
+	
+	private static void updateConfigText(Text text)
+	{	
+		try 
+		{
+			BufferedReader br = new BufferedReader(new FileReader(configFileName));
+			String fileText = "";
+			String line = br.readLine();
+			
+			while(line != null)
+			{
+				fileText += line + "\n";
+				line = br.readLine();
+			}
+			
+			br.close();
+			text.setText(fileText);
+		}
+		catch (Exception e) 
+		{
+			AlertBox.displayAlert("Error", "Could not display config file.");
+		}
+				
 	}
 
 	

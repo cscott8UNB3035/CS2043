@@ -4,8 +4,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -25,14 +25,14 @@ public class AlertBox
 		
 		
 		//Window Components
-		Label label = new Label();
-		label.setText(message);
+		Text text = new Text();
+		text.setText(message);
 		
 		Button closeButton = new Button("OK");
 		closeButton.setOnAction( e-> window.close());
 		
 		VBox layout = new VBox(10);
-		layout.getChildren().addAll(label, closeButton);
+		layout.getChildren().addAll(text, closeButton);
 		layout.setAlignment(Pos.CENTER);
 		layout.setPadding(new Insets(10,10,10,10));
 		

@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 
 public class ProcessInfoGUI
 {
-
+	
 	
 	protected static void showDataProcessor()
 	{
@@ -35,10 +35,10 @@ public class ProcessInfoGUI
 		start.setMaxHeight(40);
 		start.setOnAction(e ->
 		{
-			
-			ExcelReader.transcriptCollector();
-			System.out.println("done");
-			ExcelReader.closeExcel();
+			if(ConfirmBox.display("Process Transcripts", "Process transcripts in this folder?:\n\n" + ConfigGUI.getTranscriptFolderPath() + "\n"))
+			{
+				processTranscripts();
+			}
 		});
 		
 		
@@ -99,6 +99,19 @@ public class ProcessInfoGUI
 		window.show();
 		
 		// ------------------------------------
+	}
+	
+	
+	private static void processTranscripts()
+	{
+		try
+		{
+			
+		}
+		catch(Exception e)
+		{
+			AlertBox.displayAlert("Error", "Could not process transcripts.");
+		}
 	}
 	
 	
