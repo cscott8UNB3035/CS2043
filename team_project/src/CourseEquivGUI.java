@@ -51,6 +51,12 @@ public class CourseEquivGUI
 	}
 	
 	
+	protected static void openOutputStream()
+	{
+		
+	}
+	
+	
 	protected static void closeCourseEquiv()
 	{
 		
@@ -68,6 +74,12 @@ public class CourseEquivGUI
 	}
 	
 	
+	protected static void closeOutputStream()
+	{
+		
+	}
+	
+	
 	// ----- GUI Methods -----
 	
 	
@@ -81,7 +93,7 @@ public class CourseEquivGUI
 		
 	
 		//top
-		Text equivTitle = new Text("Course Equivalencies");
+		Text equivTitle = new Text("Course Equivalences");
 		equivTitle.setFont(Font.font(16));
 		
 		HBox topMenu = new HBox();

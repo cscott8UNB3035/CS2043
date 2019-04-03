@@ -134,7 +134,7 @@ public class SystemGUI extends Application
 		
 		window.setOnShowing(e -> 
 		{
-			
+			//check if config file is present, if not create one.
 		});
 		
 		window.setScene(scene1);

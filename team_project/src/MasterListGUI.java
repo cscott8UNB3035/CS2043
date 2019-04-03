@@ -74,7 +74,7 @@ public class MasterListGUI
 		
 		window.setOnShowing(e -> 
 		{
-			
+			//updateMasterList();
 		});
 		
 		window.setScene(scene);
@@ -82,6 +82,12 @@ public class MasterListGUI
 		window.show();
 		
 		// ------------------------------------
+	}
+	
+	
+	private static void updateMasterList()
+	{
+		
 	}
 	
 	
