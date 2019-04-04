@@ -103,6 +103,20 @@ public class ConfigGUI
 	}
 	
 	
+	protected static String getTranscriptName()
+	{
+		try
+		{
+			return prop.getProperty("transcript_name");
+		}
+		catch (Exception e)
+		{
+			AlertBox.displayAlert("Error", "Cannot find Transcript Name.");
+			return null;
+		}
+	}
+	
+	
 	protected static void closeConfig()
 	{
 		

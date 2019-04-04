@@ -11,8 +11,10 @@ import javafx.stage.*;
 
 public class SystemGUI extends Application
 {
-	static Stage window;
-	Scene scene1;
+	private static Stage window;
+	private Scene scene1;
+	
+	protected static TranscriptHandler tScriptList;
 	
 	
 	public static void main(String[] args)
@@ -63,7 +65,7 @@ public class SystemGUI extends Application
 		stats.setMaxWidth(130);
 		stats.setOnAction(e ->
 		{
-			StatisticsGUI.showStatistics();
+			StatsAndAnalysis.showStatistics(tScriptList);
 		});
 		
 		
@@ -129,12 +131,20 @@ public class SystemGUI extends Application
 		window.setOnCloseRequest(e -> 
 		{
 			e.consume();
+			
+			//make sure changes are saved to all files
+			//save tScriptList
+			
 			closeProgram();
 		});
 		
 		window.setOnShowing(e -> 
 		{
 			//check if config file is present, if not create one.
+			
+			//ask if user wants to re-use tScriptList
+			
+			initializeTScriptList();
 		});
 		
 		window.setScene(scene1);
@@ -154,6 +164,12 @@ public class SystemGUI extends Application
 		{
 			window.close();
 		}
+	}
+	
+	
+	private void initializeTScriptList()
+	{
+		tScriptList = new TranscriptHandler();
 	}
 	
 	
