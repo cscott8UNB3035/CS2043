@@ -63,7 +63,6 @@ public class CourseEquivGUI
 		try
 		{	
 			fis.close();
-			//fos.close();
 			workbook.close();
 		}
 		catch(Exception e)
