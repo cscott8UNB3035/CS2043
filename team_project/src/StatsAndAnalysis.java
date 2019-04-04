@@ -1,7 +1,7 @@
 package team_project;
 
 public class StatsAndAnalysis {
-	protected static int getNumStudetsPerYear(String Year){
+	protected static int getNumStudentsPerYear(String Year){
 		int output = 0;
 		for( transcript t: list) {
 			for(course c: tScript) {
