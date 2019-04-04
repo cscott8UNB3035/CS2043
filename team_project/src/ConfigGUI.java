@@ -62,7 +62,7 @@ public class ConfigGUI
 		
 		try
 		{
-			return prop.getProperty("course_equiv_path") + "course_equivalency_list.xlsx";
+			return prop.getProperty("course_equiv_path") + "course_equivalence_list.xlsx";
 		}
 		catch (Exception e)
 		{
@@ -70,6 +70,20 @@ public class ConfigGUI
 			return null;
 		}
 		
+	}
+	
+	
+	protected static String getCourseAreasPath()
+	{
+		try
+		{
+			return prop.getProperty("course_areas_path") + "course_areas.xlsx";
+		}
+		catch (Exception e)
+		{
+			AlertBox.displayAlert("Error", "Cannot find Course Areas path.");
+			return null;
+		}
 	}
 	
 	
