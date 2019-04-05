@@ -6,8 +6,10 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -36,6 +38,11 @@ public class MasterList
 	protected void addCourse(String courseCode)
 	{
 		this.masterList.add(courseCode);
+	}
+	
+	protected void addCourse(int index, String courseCode)
+	{
+		this.masterList.add(index, courseCode);
 	}
 	
 	
@@ -73,6 +80,8 @@ public class MasterList
 		title.setAlignment(Pos.CENTER);
 		title.getChildren().addAll(masterList);
 		
+		//mid
+		ScrollPane data = new ScrollPane();
 		
 		HBox bottomButtons = new HBox();
 		bottomButtons.setPadding(new Insets(15, 15, 15, 15));
@@ -83,10 +92,11 @@ public class MasterList
 		
 		BorderPane layout = new BorderPane();
 		layout.setTop(title);
+		layout.setCenter(data);
 		layout.setBottom(bottomButtons);
 		
 		
-		scene = new Scene(layout, 250, 200);
+		scene = new Scene(layout, 250, 500);
 		
 		// -------------------------------------
 		
@@ -102,6 +112,7 @@ public class MasterList
 		window.setOnShowing(e -> 
 		{
 			updateMasterList(courses, cohort);
+			updateMasterListWindow(data, courses);
 		});
 		
 		window.setScene(scene);
@@ -118,37 +129,63 @@ public class MasterList
 		if(courses.getSize() == 0)
 		{
 			courses.addCourse(cohort.getTranscript(0).getCourse(0).getCourseCode());
+			courses.addCourse(null);
 		}
 		
-		for(int k = 0; k<cohort.getSize(); k++)
+		for(int i=0; i<cohort.getSize(); i++)
 		{
-			Transcript tScript = cohort.getTranscript(k);
+			Transcript tScript = cohort.getTranscript(i);
 			
-			for(int i = 0; i < tScript.getSize(); i++) 
+			for(int j=0; j<tScript.getSize(); j++)
 			{
+				String newCourse = tScript.getCourse(j).getCourseCode();
 				
-				for(int j = 0; j < courses.getSize(); j++) 
+				for(int k=0; k<courses.getSize()+1; k++)
 				{
-					try 
+					try
 					{
-						if(tScript.getCourse(i).getCourseCode().equals(courses.getCourse(j))) 
+						String mlistCourse = courses.getCourse(k);
+						
+						if(newCourse.equals(mlistCourse)) 
 						{
 							continue;
 						}
 						else if(courses.getCourse(j) == null) 
 						{
-							courses.addCourse(tScript.getCourse(i).getCourseCode());
+							courses.addCourse(k, newCourse);
 							break;
 						}
 					}
-					catch(NullPointerException e) 
+					catch(Exception e)
 					{
-						System.out.println("Unable to read Master List.");
+						break;
 					}
+					
 				}
 			}
+			
 		}
+		
+		
 		return courses;
+	}
+
+	
+	private static void updateMasterListWindow(ScrollPane sp, MasterList mlist)
+	{
+		VBox stuff = new VBox();
+		stuff.setPadding(new Insets(10,10,10,10));
+		stuff.setSpacing(10);
+		stuff.setAlignment(Pos.CENTER);
+		
+		for(int i=0; i<mlist.getSize(); i++)
+		{
+			Text temp = new Text(mlist.getCourse(i));
+			stuff.getChildren().add(temp);
+			temp.setFont(Font.font(13));
+		}
+		
+		sp.setContent(stuff);
 	}
 	
 	

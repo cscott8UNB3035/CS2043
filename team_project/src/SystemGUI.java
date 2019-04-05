@@ -16,6 +16,7 @@ public class SystemGUI extends Application
 	
 	protected static TranscriptHandler tScriptList;
 	protected static MasterList masterCourseList;
+	protected static Distributions distributions;
 	
 	
 	public static void main(String[] args)
@@ -147,6 +148,7 @@ public class SystemGUI extends Application
 			
 			initializeTScriptList();
 			initializeMasterList();
+			initializeRawDistributionsList();
 		});
 		
 		window.setScene(scene1);
@@ -191,6 +193,16 @@ public class SystemGUI extends Application
 	{
 		return masterCourseList;
 	}
-
+	
+	
+	protected static void initializeRawDistributionsList()
+	{
+		for(int i=0; i<tScriptList.getSize(); i++)
+		{
+			Transcript t = tScriptList.getTranscript(i);
+			distributions.getRawDistributions(t);
+			System.out.println();
+		}
+	}
 	
 }

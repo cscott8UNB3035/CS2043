@@ -152,39 +152,47 @@ public class StatsAndAnalysis {
 		});
 		
 		
-		Button stat1 = new Button("Stat 1");
-		stat1.setMinWidth(100);
-		stat1.setMaxWidth(100);
+		Button stat1 = new Button("Students/Year");
+		stat1.setMinWidth(175);
+		stat1.setMaxWidth(175);
 		stat1.setOnAction(e ->
 		{
 			studentsPerYearWindow();
 		});
 		
 		
-		Button stat2 = new Button("Stat 2");
-		stat2.setMinWidth(100);
-		stat2.setMaxWidth(100);
+		Button stat2 = new Button("Students/Location");
+		stat2.setMinWidth(175);
+		stat2.setMaxWidth(175);
 		stat2.setOnAction(e ->
 		{
 			studentsPerLocationWindow();
 		});
 		
 		
-		Button stat3 = new Button("Stat 3");
-		stat3.setMinWidth(100);
-		stat3.setMaxWidth(100);
+		Button stat3 = new Button("Students/Course/Year");
+		stat3.setMinWidth(175);
+		stat3.setMaxWidth(175);
 		stat3.setOnAction(e ->
 		{
 			studentsPerCoursePerYearWindow();
 		});
 		
 		
-		Button stat4 = new Button("Stat 4");
-		stat4.setMinWidth(100);
-		stat4.setMaxWidth(100);
+		Button stat4 = new Button("Students/Location/Year");
+		stat4.setMinWidth(175);
+		stat4.setMaxWidth(175);
 		stat4.setOnAction(e ->
 		{
 			studentsInLocationByYearWindow();
+		});
+		
+		Button raw = new Button("Get Raw Distribution");
+		raw.setMinWidth(175);
+		raw.setMaxWidth(175);
+		raw.setOnAction(e ->
+		{
+			//SystemGUI.initializeRawDistributionsList();
 		});
 		
 		
@@ -200,7 +208,7 @@ public class StatsAndAnalysis {
 		stats.setPadding(new Insets(15, 15, 15, 15));
 		stats.setSpacing(15);
 		stats.setAlignment(Pos.CENTER);
-		stats.getChildren().addAll(stat1, stat2, stat3, stat4);
+		stats.getChildren().addAll(stat1, stat2, stat3, stat4, raw);
 		
 		
 		HBox bottomButtons = new HBox();
