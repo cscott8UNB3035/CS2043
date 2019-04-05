@@ -21,14 +21,11 @@ import javafx.stage.Stage;
  * 2. output(type, var): if all output is categorized
  */
 public class StatsAndAnalysis {
-	
+  
 	private static TranscriptHandler tScriptList;
+
 	
-	int stat1, stat2, stat3, stat4;
-	
-	
-	
-	
+  
 	protected static int getNumStudetsPerYear(String Year){
 		ArrayList<Transcript> list = tScriptList.getList();
 		int output = 0;
