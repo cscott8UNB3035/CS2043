@@ -15,6 +15,7 @@ public class SystemGUI extends Application
 	private Scene scene1;
 	
 	protected static TranscriptHandler tScriptList;
+	protected static MasterList masterCourseList;
 	
 	
 	public static void main(String[] args)
@@ -74,7 +75,7 @@ public class SystemGUI extends Application
 		masterList.setMaxWidth(130);
 		masterList.setOnAction(e ->
 		{
-			MasterListGUI.showMasterList();
+			masterCourseList = MasterList.showMasterList(masterCourseList, tScriptList);
 		});
 		
 		
@@ -145,6 +146,7 @@ public class SystemGUI extends Application
 			//ask if user wants to re-use tScriptList
 			
 			initializeTScriptList();
+			initializeMasterList();
 		});
 		
 		window.setScene(scene1);
@@ -176,6 +178,18 @@ public class SystemGUI extends Application
 	private static TranscriptHandler getTScriptList()
 	{
 		return tScriptList;
+	}
+	
+	
+	private static void initializeMasterList()
+	{
+		masterCourseList = new MasterList();
+	}
+	
+	
+	private static MasterList getMasterList()
+	{
+		return masterCourseList;
 	}
 
 	

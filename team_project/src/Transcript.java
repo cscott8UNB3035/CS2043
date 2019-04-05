@@ -19,4 +19,14 @@ public class Transcript {
 		return tScript;
 	}
 	
+	protected int getSize()
+	{
+		return this.tScript.size();
+	}
+	
+	protected Course getCourse(int index)
+	{
+		return this.tScript.get(index);
+	}
+	
 }
