@@ -1,6 +1,16 @@
 package team_project;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -27,63 +37,92 @@ public class StatsAndAnalysis {
 	
   
 	protected static int getNumStudetsPerYear(String Year){
-		ArrayList<Transcript> list = tScriptList.getList();
-		int output = 0;
-		for( Transcript t: list) {
-			ArrayList<Course> tScript = t.getCourses();
-			for(Course c: tScript) {
-				if(c.getTerm().contains(Year)) {
-					output++;
-					break;
+		try
+		{
+			ArrayList<Transcript> list = tScriptList.getList();
+			int output = 0;
+			for( Transcript t: list) {
+				ArrayList<Course> tScript = t.getCourses();
+				for(Course c: tScript) {
+					if(c.getTerm().contains(Year)) {
+						output++;
+						break;
+					}
 				}
 			}
+			return output;
 		}
-		return output;
+		catch(NullPointerException e)
+		{
+			return -1;
+		}
+		
 	}
 	
 	protected static int getNumStudentsPerLocation(String Location) {
-		ArrayList<Transcript> list = tScriptList.getList();
-		int output = 0;
-		for( Transcript t: list) {
-			ArrayList<Course> tScript = t.getCourses();
-			for(Course c: tScript) {
-				if(c.getSectionCode().contains(Location)) {
-					output++;
-					break;
+		try
+		{
+			ArrayList<Transcript> list = tScriptList.getList();
+			int output = 0;
+			for( Transcript t: list) {
+				ArrayList<Course> tScript = t.getCourses();
+				for(Course c: tScript) {
+					if(c.getSectionCode().contains(Location)) {
+						output++;
+						break;
+					}
 				}
 			}
+			return output;
 		}
-		return output;
+		catch(NullPointerException e)
+		{
+			return -1;
+		}
 	}
 	
 	protected static int getNumStudentsInCoursePerYear(String courseCode, String Year) {
-		ArrayList<Transcript> list = tScriptList.getList();
-		int output = 0;
-		for( Transcript t: list) {
-			ArrayList<Course> tScript = t.getCourses();
-			for(Course c: tScript) {
-				if(c.getCourseCode().equals(courseCode)&&c.getTerm().contains(Year)) {
-					output++;
-					break;
+		try
+		{
+			ArrayList<Transcript> list = tScriptList.getList();
+			int output = 0;
+			for( Transcript t: list) {
+				ArrayList<Course> tScript = t.getCourses();
+				for(Course c: tScript) {
+					if(c.getCourseCode().equals(courseCode)&&c.getTerm().contains(Year)) {
+						output++;
+						break;
+					}
 				}
 			}
+			return output;
 		}
-		return output;
+		catch(NullPointerException e)
+		{
+			return -1;
+		}
 	}
 	
 	protected static int getNumStudentsInLocationPerYear(String Location, String Year) {
-		ArrayList<Transcript> list = tScriptList.getList();
-		int output = 0;
-		for( Transcript t: list) {
-			ArrayList<Course> tScript = t.getCourses();
-			for(Course c: tScript) {
-				if(c.getSectionCode().contains(Location)&&c.getTerm().contains(Year)) {
-					output++;
-					break;
+		try
+		{
+			ArrayList<Transcript> list = tScriptList.getList();
+			int output = 0;
+			for( Transcript t: list) {
+				ArrayList<Course> tScript = t.getCourses();
+				for(Course c: tScript) {
+					if(c.getSectionCode().contains(Location)&&c.getTerm().contains(Year)) {
+						output++;
+						break;
+					}
 				}
 			}
+			return output;
 		}
-		return output;
+		catch(NullPointerException e)
+		{
+			return -1;
+		}
 	}
 	
 	
@@ -220,8 +259,10 @@ public class StatsAndAnalysis {
 		Button ok = new Button("OK");
 		ok.setOnAction(e ->
 		{
-			getNumStudetsPerYear(enterYear.getText());
-			//create output
+			int numStudents = getNumStudetsPerYear(yearField.getText());
+			
+			output("Students Per Year", yearField.getText(), ("" + numStudents), "");
+			
 			window.close();
 		});
 		
@@ -298,8 +339,10 @@ public class StatsAndAnalysis {
 		Button ok = new Button("OK");
 		ok.setOnAction(e ->
 		{
-			getNumStudentsPerLocation(enterLocation.getText());
-			//create output
+			int numStudents = getNumStudentsPerLocation(locationField.getText());
+			
+			output("Students Per Location", locationField.getText(), ("" + numStudents), "");
+			
 			window.close();
 		});
 		
@@ -383,8 +426,10 @@ public class StatsAndAnalysis {
 		Button ok = new Button("OK");
 		ok.setOnAction(e ->
 		{
-			getNumStudentsInCoursePerYear(courseField.getText(), yearField.getText());
-			//create output
+			int numStudents = getNumStudentsInCoursePerYear(courseField.getText(), yearField.getText());
+			
+			output("Students Per Course Per Year", courseField.getText(), yearField.getText(), ("" + numStudents));
+			
 			window.close();
 		});
 		
@@ -468,8 +513,10 @@ public class StatsAndAnalysis {
 		Button ok = new Button("OK");
 		ok.setOnAction(e ->
 		{
-			getNumStudentsInLocationPerYear(locationField.getText(), yearField.getText());
-			//create output
+			int numStudents = getNumStudentsInLocationPerYear(locationField.getText(), yearField.getText());
+			
+			output("Students In Location By Year", yearField.getText(), locationField.getText(), ("" + numStudents));
+			
 			window.close();
 		});
 		
@@ -525,6 +572,90 @@ public class StatsAndAnalysis {
 		window.setTitle("Students In Location By Year");
 		window.showAndWait();
 		
+	}
+
+	
+	
+	protected static void output(String sheetName, String rowValueOne, String rowValueTwo, String rowValueThree)
+	{
+		boolean fileFound = false;
+		int currentRow = 0;
+		
+		XSSFWorkbook workbook = null;
+		XSSFSheet spreadsheet = null;
+		XSSFRow row;
+		XSSFCell cell;
+		
+		File file = new File(ConfigGUI.getOutputFolderPath() + "output.xlsx");
+		FileOutputStream out = null;
+		
+		
+		//check for file
+		try
+		{
+			FileInputStream fis = new FileInputStream(file);
+			workbook = new XSSFWorkbook(fis);
+			fileFound = true;
+		}
+		catch(Exception e)
+		{
+			AlertBox.displayAlert("Attention", "Output file does not exist. New file will be created.");
+			workbook = new XSSFWorkbook();
+			
+			spreadsheet = workbook.createSheet("Students Per Year");
+			spreadsheet = workbook.createSheet("Students Per Location");
+			spreadsheet = workbook.createSheet("Students Per Course Per Year");
+			spreadsheet = workbook.createSheet("Students In Location By Year");
+		} 
+		
+		
+		try
+		{
+			out = new FileOutputStream(file);
+		}
+		catch(Exception e)
+		{
+			AlertBox.displayAlert("Error", "Could not set File Output Stream.");
+		}
+		
+		
+		//file now exists. get proper sheet
+		spreadsheet = workbook.getSheet(sheetName);
+		
+		try
+		{
+			currentRow = spreadsheet.getLastRowNum() + 1;
+		}
+		//sheet is empty
+		catch(Exception e)
+		{
+			row = spreadsheet.createRow(currentRow);
+			cell = row.createCell(0);
+			cell.setCellValue(sheetName);
+			currentRow = 2;
+		}
+		
+		//create cells
+		row = spreadsheet.createRow(currentRow);
+		cell = row.createCell(0);
+		cell.setCellValue(rowValueOne);
+		cell = row.createCell(1);
+		cell.setCellValue(rowValueTwo);
+		cell = row.createCell(2);
+		cell.setCellValue(rowValueThree);
+		
+		//write new data to excel file
+		try
+		{
+			workbook.write(out);
+			
+			out.close();
+			workbook.close();
+		}
+		catch(Exception e)
+		{
+			AlertBox.displayAlert("Error", "Could not write to excel file.");
+		}
 	}
 	
 }

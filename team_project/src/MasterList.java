@@ -115,6 +115,11 @@ public class MasterList
 	
 	private static MasterList updateMasterList(MasterList courses, TranscriptHandler cohort)
 	{
+		if(courses.getSize() == 0)
+		{
+			courses.addCourse(cohort.getTranscript(0).getCourse(0).getCourseCode());
+		}
+		
 		for(int k = 0; k<cohort.getSize(); k++)
 		{
 			Transcript tScript = cohort.getTranscript(k);
@@ -122,22 +127,15 @@ public class MasterList
 			for(int i = 0; i < tScript.getSize(); i++) 
 			{
 				
-				if(courses.getSize() == 0)
-				{
-					courses.addCourse(tScript.getCourse(i).getCourseCode());
-					continue;
-				}
-				
 				for(int j = 0; j < courses.getSize(); j++) 
 				{
 					try 
 					{
 						if(tScript.getCourse(i).getCourseCode().equals(courses.getCourse(j))) 
 						{
-							break;
+							continue;
 						}
-						
-						if(courses.getCourse(j) == null) 
+						else if(courses.getCourse(j) == null) 
 						{
 							courses.addCourse(tScript.getCourse(i).getCourseCode());
 							break;
