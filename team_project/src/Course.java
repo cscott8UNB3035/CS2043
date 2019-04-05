@@ -7,6 +7,7 @@ public class Course {
 	private String title;
 	private String letterGrade;
 	private double creditHour;
+	private String cHour;
 	private String term;
 	
 	protected Course(String courseCode, String sectionCode, String title, String letterGrade, double creditHour, String term)
@@ -18,6 +19,18 @@ public class Course {
 		this.creditHour = creditHour;
 		this.term = term;
 	}
+	
+	
+	protected Course(String courseCode, String sectionCode, String title, String letterGrade, String creditHour, String term)
+	{
+		this.courseCode = courseCode;
+		this.sectionCode = sectionCode;
+		this.title = title;
+		this.letterGrade = letterGrade;
+		this.cHour = creditHour;
+		this.term = term;
+	}
+	
 
 	protected String getCourseCode() {
 		return courseCode;
@@ -67,7 +80,13 @@ public class Course {
 		this.term = term;
 	}
 	
-	public String toString() {
-		return courseCode + "\t" + sectionCode + "\t" + title + "\t" + letterGrade + "\t" + creditHour + "\t" + term + "\n";
+	protected String getCHour()
+	{
+		return cHour;
+	}
+	
+	protected void setCHour(String cHour)
+	{
+		this.cHour = cHour;
 	}
 }

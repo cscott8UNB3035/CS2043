@@ -56,7 +56,7 @@ public class SystemGUI extends Application
 		process.setMaxWidth(130);
 		process.setOnAction(e ->
 		{
-			ProcessInfoGUI.showDataProcessor();
+			tScriptList = ProcessInfoGUI.showDataProcessor(tScriptList);
 		});
 		
 		
@@ -167,10 +167,16 @@ public class SystemGUI extends Application
 	}
 	
 	
-	private void initializeTScriptList()
+	private static void initializeTScriptList()
 	{
 		tScriptList = new TranscriptHandler();
 	}
 	
+	
+	private static TranscriptHandler getTScriptList()
+	{
+		return tScriptList;
+	}
+
 	
 }
