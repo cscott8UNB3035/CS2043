@@ -62,7 +62,7 @@ public class ConfigGUI
 		
 		try
 		{
-			return prop.getProperty("course_equiv_path") + "course_equivalence_list.xlsx";
+			return prop.getProperty("course_equiv_path");
 		}
 		catch (Exception e)
 		{
@@ -77,7 +77,7 @@ public class ConfigGUI
 	{
 		try
 		{
-			return prop.getProperty("course_areas_path") + "course_areas.xlsx";
+			return prop.getProperty("course_areas_path");
 		}
 		catch (Exception e)
 		{
@@ -112,6 +112,20 @@ public class ConfigGUI
 		catch (Exception e)
 		{
 			AlertBox.displayAlert("Error", "Cannot find Output folder path.");
+			return null;
+		}
+	}
+	
+	
+	protected static String getLevel(String level)
+	{
+		try
+		{
+			return prop.getProperty("level" + level);
+		}
+		catch(Exception e)
+		{
+			AlertBox.displayAlert("Error", "Cannot find specified level.");
 			return null;
 		}
 	}
@@ -158,6 +172,27 @@ public class ConfigGUI
 		}
 	}
 	
+	
+	//Universal set-property method
+	protected static void updateProperty(String property, String newValue)
+	{
+		
+	}
+	
+	
+	//Universal get-property method
+	protected static String getProperty(String property)
+	{
+		try
+		{
+			return prop.getProperty(property);
+		}
+		catch (Exception e)
+		{
+			AlertBox.displayAlert("Error", "Cannot find requested property.");
+			return null;
+		}
+	}
 	
 	// ----- GUI Methods -----
 	

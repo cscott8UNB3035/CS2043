@@ -16,6 +16,9 @@ public class SystemGUI extends Application
 	
 	protected static TranscriptHandler tScriptList;
 	protected static MasterList masterCourseList;
+	protected static Distributions rawDistributions;
+	protected static Distributions areaDistributions;
+	protected static Distributions[] distributions = new Distributions[] {rawDistributions, areaDistributions};
 	
 	
 	public static void main(String[] args)
@@ -66,7 +69,7 @@ public class SystemGUI extends Application
 		stats.setMaxWidth(130);
 		stats.setOnAction(e ->
 		{
-			StatsAndAnalysis.showStatistics(tScriptList);
+			distributions = StatsAndAnalysis.showStatistics(tScriptList, distributions);
 		});
 		
 		
@@ -141,9 +144,8 @@ public class SystemGUI extends Application
 		
 		window.setOnShowing(e -> 
 		{
-			//check if config file is present, if not create one.
-			
-			//ask if user wants to re-use tScriptList
+			//Possible Feature: check if config file is present, if not create one.
+			//Possible Feature: ask if user wants to re-use tScriptList after each session
 			
 			initializeTScriptList();
 			initializeMasterList();
@@ -175,22 +177,10 @@ public class SystemGUI extends Application
 	}
 	
 	
-	private static TranscriptHandler getTScriptList()
-	{
-		return tScriptList;
-	}
-	
-	
 	private static void initializeMasterList()
 	{
 		masterCourseList = new MasterList();
 	}
 	
-	
-	private static MasterList getMasterList()
-	{
-		return masterCourseList;
-	}
-
 	
 }

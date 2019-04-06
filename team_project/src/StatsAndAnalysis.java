@@ -30,12 +30,11 @@ import javafx.stage.Stage;
  * 1. output(filename, var): if all output is standard
  * 2. output(type, var): if all output is categorized
  */
-public class StatsAndAnalysis {
-  
+public class StatsAndAnalysis
+{  
 	private static TranscriptHandler tScriptList;
 
 	
-  
 	protected static int getNumStudetsPerYear(String Year){
 		try
 		{
@@ -127,11 +126,10 @@ public class StatsAndAnalysis {
 	
 	
 	
-	
 	/*
 	 * GUI Component
 	 */
-	protected static void showStatistics(TranscriptHandler cohort)
+	protected static Distributions[] showStatistics(TranscriptHandler cohort, Distributions[] distributions)
 	{
 		ConfigGUI.openConfig();
 		tScriptList = cohort;
@@ -152,39 +150,55 @@ public class StatsAndAnalysis {
 		});
 		
 		
-		Button stat1 = new Button("Stat 1");
-		stat1.setMinWidth(100);
-		stat1.setMaxWidth(100);
+		Button stat1 = new Button("Students/Year");
+		stat1.setMinWidth(175);
+		stat1.setMaxWidth(175);
 		stat1.setOnAction(e ->
 		{
 			studentsPerYearWindow();
 		});
 		
 		
-		Button stat2 = new Button("Stat 2");
-		stat2.setMinWidth(100);
-		stat2.setMaxWidth(100);
+		Button stat2 = new Button("Students/Location");
+		stat2.setMinWidth(175);
+		stat2.setMaxWidth(175);
 		stat2.setOnAction(e ->
 		{
 			studentsPerLocationWindow();
 		});
 		
 		
-		Button stat3 = new Button("Stat 3");
-		stat3.setMinWidth(100);
-		stat3.setMaxWidth(100);
+		Button stat3 = new Button("Students/Course/Year");
+		stat3.setMinWidth(175);
+		stat3.setMaxWidth(175);
 		stat3.setOnAction(e ->
 		{
 			studentsPerCoursePerYearWindow();
 		});
 		
 		
-		Button stat4 = new Button("Stat 4");
-		stat4.setMinWidth(100);
-		stat4.setMaxWidth(100);
+		Button stat4 = new Button("Students/Location/Year");
+		stat4.setMinWidth(175);
+		stat4.setMaxWidth(175);
 		stat4.setOnAction(e ->
 		{
 			studentsInLocationByYearWindow();
+		});
+		
+		Button raw = new Button("Get Raw Distribution");
+		raw.setMinWidth(175);
+		raw.setMaxWidth(175);
+		raw.setOnAction(e ->
+		{
+			//distributions[0] = generateRawDistributions(cohort, distributions[0]);
+		});
+		
+		Button area = new Button("Get Raw Distribution");
+		area.setMinWidth(175);
+		area.setMaxWidth(175);
+		area.setOnAction(e ->
+		{
+			//distributions[1] = generateAreaDistributions(cohort, distributions[1]);
 		});
 		
 		
@@ -200,7 +214,7 @@ public class StatsAndAnalysis {
 		stats.setPadding(new Insets(15, 15, 15, 15));
 		stats.setSpacing(15);
 		stats.setAlignment(Pos.CENTER);
-		stats.getChildren().addAll(stat1, stat2, stat3, stat4);
+		stats.getChildren().addAll(stat1, stat2, stat3, stat4, raw, area);
 		
 		
 		HBox bottomButtons = new HBox();
@@ -235,13 +249,18 @@ public class StatsAndAnalysis {
 		
 		window.setScene(scene);
 		window.setTitle("Statistics");
-		window.show();
+		window.showAndWait();
 		
 		// ------------------------------------
+		
+		return distributions;
 	}
 	
 	
 	
+	/*
+	 * GUI Helper-Methods
+	 */
 	protected static void studentsPerYearWindow()
 	{
 		Stage window = new Stage();
@@ -321,7 +340,6 @@ public class StatsAndAnalysis {
 	}
 	
 	
-	
 	protected static void studentsPerLocationWindow()
 	{
 		Stage window = new Stage();
@@ -399,7 +417,6 @@ public class StatsAndAnalysis {
 		window.showAndWait();
 		
 	}
-	
 	
 	
 	protected static void studentsPerCoursePerYearWindow()
@@ -488,7 +505,6 @@ public class StatsAndAnalysis {
 	}
 	
 	
-	
 	protected static void studentsInLocationByYearWindow()
 	{
 		Stage window = new Stage();
@@ -575,7 +591,9 @@ public class StatsAndAnalysis {
 	}
 
 	
-	
+	/*
+	 * Output for statistics
+	 */
 	protected static void output(String sheetName, String rowValueOne, String rowValueTwo, String rowValueThree)
 	{
 		boolean fileFound = false;
@@ -587,14 +605,15 @@ public class StatsAndAnalysis {
 		XSSFCell cell;
 		
 		File file = new File(ConfigGUI.getOutputFolderPath() + "output.xlsx");
+		FileInputStream in = null;
 		FileOutputStream out = null;
 		
 		
 		//check for file
 		try
 		{
-			FileInputStream fis = new FileInputStream(file);
-			workbook = new XSSFWorkbook(fis);
+			in = new FileInputStream(file);
+			workbook = new XSSFWorkbook(in);
 			fileFound = true;
 		}
 		catch(Exception e)
@@ -622,20 +641,8 @@ public class StatsAndAnalysis {
 		//file now exists. get proper sheet
 		spreadsheet = workbook.getSheet(sheetName);
 		
-		try
-		{
-			currentRow = spreadsheet.getLastRowNum() + 1;
-		}
-		//sheet is empty
-		catch(Exception e)
-		{
-			row = spreadsheet.createRow(currentRow);
-			cell = row.createCell(0);
-			cell.setCellValue(sheetName);
-			currentRow = 2;
-		}
-		
 		//create cells
+		currentRow = spreadsheet.getLastRowNum() + 1;
 		row = spreadsheet.createRow(currentRow);
 		cell = row.createCell(0);
 		cell.setCellValue(rowValueOne);
@@ -648,7 +655,6 @@ public class StatsAndAnalysis {
 		try
 		{
 			workbook.write(out);
-			
 			out.close();
 			workbook.close();
 		}
@@ -656,6 +662,38 @@ public class StatsAndAnalysis {
 		{
 			AlertBox.displayAlert("Error", "Could not write to excel file.");
 		}
+		
+		try
+		{
+			in.close();
+		}
+		catch(Exception e)
+		{
+			
+		}
+		
 	}
+
+	
+	/*protected static Distribution generateRawDistributions(TranscriptHandler cohort, Distributions raw)
+	{
+		
+		raw = Distributions.getRawDistributions(cohort);
+		
+	}
+
+
+	protected static Distribution generateAreaDistributions(TranscriptHandler cohort, Distributions area)
+	{
+		
+		area = Distributions.getAreaDistributions(cohort)
+		
+	}
+	
+	
+	protected static void outputDistributions(Distributions[] distributions)
+	{
+		
+	}*/
 	
 }
