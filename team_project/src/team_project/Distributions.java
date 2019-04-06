@@ -23,11 +23,16 @@ public class Distributions {
 		this.exceeds = exceeds;
 	}
 	
-	protected void getAreaDistributions(ArrayList<Course> tScript, String area) {
-		
+	protected Distributions getAreaDistributions(TranscriptHandler tHandler, Area area) {
+		int num = 0;
+		for(int i = 0; i <= list.getSize(); i++) {
+			for(int j = 0; j <= list.getTranscript(j).size(); j++) {
+				if(list.getTranscript(j))
+			}
+		}
 	}
 	
-	protected Distributions getRawDistributions(ArrayList<Course> tScript) {
+	protected Distributions getRawDistributions(ArrayList<Course>, tScript) {
 		int num = 0;
 		for(int i = 0; i <= tScript.size(); i++) {
 			if(courseCode.get(i).equals(tScript.get(i).getCourseCode())) {
