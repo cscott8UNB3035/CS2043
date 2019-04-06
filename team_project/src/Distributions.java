@@ -2,7 +2,8 @@ package team_project;
 
 import java.util.*;
 
-public class Distributions {
+public class Distributions
+{
 	private ArrayList<String> courseCode;
 	private ArrayList<Integer> others;
 	private int other;
@@ -15,7 +16,8 @@ public class Distributions {
 	private ArrayList<Integer> exceeds;
 	private int exceed;
 	
-	public Distributions(ArrayList<String> courseCode, ArrayList<Integer> others, ArrayList<Integer> fails, ArrayList<Integer> marginals, ArrayList<Integer> meets, ArrayList<Integer> exceeds) {
+	public Distributions(ArrayList<String> courseCode, ArrayList<Integer> others, ArrayList<Integer> fails, ArrayList<Integer> marginals, ArrayList<Integer> meets, ArrayList<Integer> exceeds)
+	{
 		this.courseCode = courseCode;
 		this.fails = fails;
 		this.marginals = marginals;
@@ -23,6 +25,7 @@ public class Distributions {
 		this.exceeds = exceeds;
 	}
 	
+
 	protected Distributions getAreaDistributions(TranscriptHandler tHandler, Area area) {
 		int num = 0;
 		for(int i = 0; i <= tHandler.getList.getSize(); i++) {
@@ -67,7 +70,7 @@ public class Distributions {
 		return distribution;
 	}
 	
-	protected Distributions getRawDistributions(TranscriptHandler tHandler, tScript) {
+	protected Distributions getRawDistributions(TranscriptHandler tHandler) {
 		int num = 0;
 		for(int i = 0; i <= tHandler.getList.getSize(); i++) {
 			for(int j = 0; j <= tHandler.getList.getTranscript(j).size(); j++) {
