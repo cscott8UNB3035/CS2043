@@ -108,7 +108,7 @@ public class Distributions {
 			}
 		}
 		Distributions distribution = new Distributions(courseCode, others, fails, marginals, meets, exceeds);
-		return distribution;s
+		return distribution;
 	}
 	
 	
