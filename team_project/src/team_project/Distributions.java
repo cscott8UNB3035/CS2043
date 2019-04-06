@@ -67,7 +67,7 @@ public class Distributions {
 		return distribution;
 	}
 	
-	protected Distributions getRawDistributions(TranscriptHandler tHandler>, tScript) {
+	protected Distributions getRawDistributions(TranscriptHandler tHandler, tScript) {
 		int num = 0;
 		for(int i = 0; i <= tHandler.getList.getSize(); i++) {
 			for(int j = 0; j <= tHandler.getList.getTranscript(j).size(); j++) {
