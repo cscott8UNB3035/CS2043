@@ -19,6 +19,7 @@ public class SystemGUI extends Application
 	protected static Distributions rawDistributions;
 	protected static Distributions areaDistributions;
 	protected static Distributions[] distributions = new Distributions[] {rawDistributions, areaDistributions};
+	protected static Area[] areas;
 	
 	
 	public static void main(String[] args)
@@ -69,7 +70,7 @@ public class SystemGUI extends Application
 		stats.setMaxWidth(130);
 		stats.setOnAction(e ->
 		{
-			distributions = StatsAndAnalysis.showStatistics(tScriptList, distributions);
+			distributions = StatsAndAnalysis.showStatistics(tScriptList, distributions, areas);
 		});
 		
 		
@@ -180,6 +181,12 @@ public class SystemGUI extends Application
 	private static void initializeMasterList()
 	{
 		masterCourseList = new MasterList();
+	}
+	
+	
+	private static void initializeAreas()
+	{
+		
 	}
 	
 	
