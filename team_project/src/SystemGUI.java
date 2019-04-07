@@ -15,6 +15,8 @@ public class SystemGUI extends Application
 	private Scene scene1;
 	
 	protected static TranscriptHandler tScriptList;
+	protected static MasterList masterCourseList;
+	protected static Distributions distributions;
 	
 	
 	public static void main(String[] args)
@@ -56,7 +58,7 @@ public class SystemGUI extends Application
 		process.setMaxWidth(130);
 		process.setOnAction(e ->
 		{
-			ProcessInfoGUI.showDataProcessor();
+			tScriptList = ProcessInfoGUI.showDataProcessor(tScriptList);
 		});
 		
 		
@@ -74,7 +76,7 @@ public class SystemGUI extends Application
 		masterList.setMaxWidth(130);
 		masterList.setOnAction(e ->
 		{
-			MasterListGUI.showMasterList();
+			masterCourseList = MasterList.showMasterList(masterCourseList, tScriptList);
 		});
 		
 		
@@ -145,6 +147,8 @@ public class SystemGUI extends Application
 			//ask if user wants to re-use tScriptList
 			
 			initializeTScriptList();
+			initializeMasterList();
+			initializeRawDistributionsList();
 		});
 		
 		window.setScene(scene1);
@@ -167,10 +171,38 @@ public class SystemGUI extends Application
 	}
 	
 	
-	private void initializeTScriptList()
+	private static void initializeTScriptList()
 	{
 		tScriptList = new TranscriptHandler();
 	}
 	
+	
+	private static TranscriptHandler getTScriptList()
+	{
+		return tScriptList;
+	}
+	
+	
+	private static void initializeMasterList()
+	{
+		masterCourseList = new MasterList();
+	}
+	
+	
+	private static MasterList getMasterList()
+	{
+		return masterCourseList;
+	}
+	
+	
+	protected static void initializeRawDistributionsList()
+	{
+		for(int i=0; i<tScriptList.getSize(); i++)
+		{
+			Transcript t = tScriptList.getTranscript(i);
+			distributions.getRawDistributions(t);
+			System.out.println();
+		}
+	}
 	
 }

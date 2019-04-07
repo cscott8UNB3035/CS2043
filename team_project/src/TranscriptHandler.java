@@ -18,6 +18,16 @@ public class TranscriptHandler {
 	{
 		return this.list;
 	}
+	
+	protected int getSize()
+	{
+		return this.list.size();
+	}
+	
+	protected Transcript getTranscript(int index)
+	{
+		return this.list.get(index);
+	}
 
 	
 }

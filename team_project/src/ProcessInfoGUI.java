@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.Scanner;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -25,61 +26,46 @@ import javafx.stage.Stage;
 
 public class ProcessInfoGUI
 {
-	private static TranscriptHandler tScriptList = SystemGUI.tScriptList;
 	private static String tScriptName = ConfigGUI.getTranscriptName();
-	private static FileInputStream fis;
-	private static XSSFWorkbook wb;
-	private static XSSFSheet sheet;
-	private static XSSFRow row;
-	
-	
-	protected static void openExcel(File file) throws FileNotFoundException, IOException 
+	private static Scanner scan;
+	private static TranscriptHandler tScriptList;
+
+	public static void openFile(File file) throws FileNotFoundException, IOException 
 	{
-		fis = new FileInputStream(file);
-		wb = new XSSFWorkbook(fis);
-		sheet = wb.getSheetAt(0);
+		scan = new Scanner(file);
 	}
-	
-	
-	protected static void readExcelFile() {
+
+	protected static Transcript readTextFile() {
 		
 		Transcript t = new Transcript();
+		String line, trimLine;
+		String[] fields;
 		
-		Iterator < Row > rowIterator = sheet.iterator();
-		row = (XSSFRow) rowIterator.next();
-			
-			while(rowIterator.hasNext())
+		while(scan.hasNextLine())
+		{
+			try
 			{
-				try
-				{	
-					String courseCode = row.getCell(1).getStringCellValue();
-					String sectionCode = row.getCell(2).getStringCellValue();
-					String title = row.getCell(3).getStringCellValue();
-					String letterGrade = row.getCell(4).getStringCellValue();
-					double creditHour = row.getCell(5).getNumericCellValue();
-					String term = row.getCell(6).getStringCellValue();
-					
-					Course c = new Course(courseCode, sectionCode, title, letterGrade, creditHour, term);
-					t.add(c);
-					
-					row = (XSSFRow) rowIterator.next();
-				}
-				catch(NullPointerException e)
-				{
-					continue;
-				}
-						
+				line=scan.nextLine();
+				trimLine = line.trim();
+				fields = trimLine.split("\\s{2,20}");
+				Course c = new Course(fields[0], fields[1], fields[2], fields[3], fields[4], fields[5]);
+				t.add(c);
 			}
-			
-			tScriptList.add(t);
+			catch(NullPointerException e)
+			{
+				break;
+			}
+					
 		}
+		return t;
+	}
 	
-	
-	protected static void closeExcel() {
+	//Dont think this is needed anymore
+	protected static void closeFile() {
 		
 		try{
 			
-			fis.close();
+			scan.close();
 			
 		}catch(Exception e){
 			
@@ -91,9 +77,10 @@ public class ProcessInfoGUI
 	
 	//GUI Functionality
 	
-	protected static void showDataProcessor()
+	protected static TranscriptHandler showDataProcessor(TranscriptHandler cohort)
 	{
 		ConfigGUI.openConfig();
+		tScriptList = cohort;
 		
 		Stage window = new Stage();
 		Scene scene;
@@ -114,7 +101,7 @@ public class ProcessInfoGUI
 			if(ConfirmBox.display("Process Transcripts", "Process transcripts in this folder?\n\n" 
 					+ ConfigGUI.getTranscriptFolderPath() + "\n\nWith this file name?\n\n" + tScriptName + "\n"))
 			{
-				processTranscripts();
+				 processTranscripts(cohort);
 			}
 		});
 		
@@ -179,14 +166,16 @@ public class ProcessInfoGUI
 		
 		window.setScene(scene);
 		window.setTitle("Data Processor");
-		window.show();
+		window.showAndWait();
 		
 		// ------------------------------------
+		
+		return cohort;
 	}
 	
 	
 	
-	private static void processTranscripts()
+	private static TranscriptHandler processTranscripts(TranscriptHandler cohort)
 	{
 		int i = 1;
 		boolean done = false;
@@ -195,24 +184,27 @@ public class ProcessInfoGUI
 		{
 			try
 			{
-				openExcel(new File(ConfigGUI.getTranscriptFolderPath() + tScriptName + "_" + i + ".txt"));
+				openFile(new File(ConfigGUI.getTranscriptFolderPath() + tScriptName + "_" + i + ".txt"));
 				
-				readExcelFile();
+				Transcript t = readTextFile();
+				cohort.add(t);
 				
-				closeExcel();
+				closeFile();
+				
+				i++;
 			}
 			catch (FileNotFoundException fnf)
 			{
 				AlertBox.displayAlert("Done", "All transcripts in the folder have been processed.");
 				done = true;
-				
 			}
 			catch (IOException e) 
 			{
 				AlertBox.displayAlert("Error", "Could not open file.");
 			}
-		}	
+		}
 		
+		return cohort;
 	}
 	
 	

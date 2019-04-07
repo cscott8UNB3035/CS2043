@@ -16,7 +16,17 @@ public class Transcript {
 	
 	protected ArrayList<Course> getCourses()
 	{
-		return tScript;
+		return this.tScript;
+	}
+	
+	protected int getSize()
+	{
+		return this.tScript.size();
+	}
+	
+	protected Course getCourse(int index)
+	{
+		return this.tScript.get(index);
 	}
 	
 }
