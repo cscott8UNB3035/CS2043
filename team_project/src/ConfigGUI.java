@@ -19,10 +19,6 @@ import javafx.scene.text.TextAlignment;
 import javafx.scene.*;
 import javafx.stage.*;
 
-/*	
- * TODO: Implement methods to modify data
- */
-
 public class ConfigGUI
 {	
 	// ----- Configuration File Variables -----

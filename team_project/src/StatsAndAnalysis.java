@@ -761,42 +761,52 @@ public class StatsAndAnalysis
 		
 		
 		int num = 0;
-		for(int i=0; i < tHandler.getSize(); i++) {
-			for(int j=0; j < tHandler.getTranscript(j).getSize(); j++) 
+		for(int i=0; i < tHandler.getSize(); i++)
+		{
+			Transcript tScript = tHandler.getTranscript(i);
+			
+			for(int j=0; j < tScript.getSize(); j++) 
 			{
-				Transcript tScript = tHandler.getTranscript(j);
-				if(tHandler.getTranscript(j).getCourse(j).equals(courseCode.get(i))) {
-					if(tScript.getCourse(i).getLetterGrade() == "F" || tScript.getCourse(i).getLetterGrade() == "D") {
-						num = 2;
-					}
-					else if(tScript.getCourse(i).getLetterGrade() == "C" || tScript.getCourse(i).getLetterGrade() == "C+") {
-						num = 3;
-					}
-					else if(tScript.getCourse(i).getLetterGrade() == "B-" || tScript.getCourse(i).getLetterGrade() == "B" || tScript.getCourse(i).getLetterGrade() == "B+") {
-						num = 4;
-					}
-					else if(tScript.getCourse(i).getLetterGrade() == "A-" || tScript.getCourse(i).getLetterGrade() == "A" || tScript.getCourse(i).getLetterGrade() == "A+") {
-						num = 5;
-					}
-					else {
-						num = 1;
-					}
-					courseCode.add(tScript.getCourse(i).getCourseCode());
-					switch(num) {
-						case 1: other = other + 1;
-								others.add(other);
-						case 2: fail = fail + 1;
-								fails.add(fail);
-								break;
-						case 3: marginal = marginal + 1;
-								marginals.add(marginal);
-								break;
-						case 4: meet = meet + 1;
-								meets.add(meet);
-								break;
-						case 5: exceed = exceed + 1;
-								exceeds.add(exceed);
-								break; 
+				Course c = tScript.getCourse(j);
+				
+				for(int k=0; k < courseCode.size(); k++)
+				{
+					String ccCourse = courseCode.get(k);
+					
+					if(c.getCourseCode().equals(ccCourse)) {
+						if(tScript.getCourse(i).getLetterGrade() == "F" || tScript.getCourse(i).getLetterGrade() == "D") {
+							num = 2;
+						}
+						else if(tScript.getCourse(i).getLetterGrade() == "C" || tScript.getCourse(i).getLetterGrade() == "C+") {
+							num = 3;
+						}
+						else if(tScript.getCourse(i).getLetterGrade() == "B-" || tScript.getCourse(i).getLetterGrade() == "B" || tScript.getCourse(i).getLetterGrade() == "B+") {
+							num = 4;
+						}
+						else if(tScript.getCourse(i).getLetterGrade() == "A-" || tScript.getCourse(i).getLetterGrade() == "A" || tScript.getCourse(i).getLetterGrade() == "A+") {
+							num = 5;
+						}
+						else {
+							num = 1;
+						}
+						
+						courseCode.add(tScript.getCourse(i).getCourseCode());
+						switch(num) {
+							case 1: other = other + 1;
+									others.add(other);
+							case 2: fail = fail + 1;
+									fails.add(fail);
+									break;
+							case 3: marginal = marginal + 1;
+									marginals.add(marginal);
+									break;
+							case 4: meet = meet + 1;
+									meets.add(meet);
+									break;
+							case 5: exceed = exceed + 1;
+									exceeds.add(exceed);
+									break; 
+						}
 					}
 				}
 			}

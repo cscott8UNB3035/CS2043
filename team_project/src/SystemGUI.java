@@ -19,7 +19,7 @@ public class SystemGUI extends Application
 	protected static Distributions rawDistributions;
 	protected static Distributions areaDistributions;
 	protected static Distributions[] distributions = new Distributions[] {rawDistributions, areaDistributions};
-	protected static Area[] areas;
+	protected static Area[] areas = null;
 	
 	
 	public static void main(String[] args)
@@ -138,7 +138,7 @@ public class SystemGUI extends Application
 			e.consume();
 			
 			//make sure changes are saved to all files
-			//save tScriptList
+			//save tScriptList?
 			
 			closeProgram();
 		});
@@ -150,6 +150,7 @@ public class SystemGUI extends Application
 			
 			initializeTScriptList();
 			initializeMasterList();
+			initializeAreas();
 		});
 		
 		window.setScene(scene1);
@@ -186,7 +187,7 @@ public class SystemGUI extends Application
 	
 	private static void initializeAreas()
 	{
-		
+		areas = ImportAreas.importAreas();
 	}
 	
 	
