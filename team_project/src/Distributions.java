@@ -26,21 +26,21 @@ public class Distributions
 	}
 	
 
-	protected Distributions getAreaDistributions(TranscriptHandler tHandler, Area area) {
+	protected static Distributions getAreaDistributions(TranscriptHandler tHandler, Area area) {
 		int num = 0;
 		for(int i = 0; i <= tHandler.getList.getSize(); i++) {
-			for(int j = 0; j <= tHandler.getList.getTranscript(j).size(); j++) {
+			for(int j = 0; j <= tHandler.getList.getTranscript(i).size(); j++) {
 				if(tHandler.getList.getTranscript(j).get(j).equals(courseCode.get(i))) {
-					if(tScript.get(i).getLetterGrade() == "F" || tScript.get(i).getLetterGrade() == "D") {
+					if(tScript.get(i).getLetterGrade().equals("F") || tScript.get(i).getLetterGrade().equals("D")) {
 						num = 2;
 					}
-					else if(tScript.get(i).getLetterGrade() == "C" || tScript.get(i).getLetterGrade() == "C+") {
+					else if(tScript.get(i).getLetterGrade().equals("C") || tScript.get(i).getLetterGrade().equals("C+")) {
 						num = 3;
 					}
-					else if(tScript.get(i).getLetterGrade() == "B-" || tScript.get(i).getLetterGrade() == "B" || tScript.get(i).getLetterGrade() == "B+") {
+					else if(tScript.get(i).getLetterGrade().equals("B-") || tScript.get(i).getLetterGrade().equals("B") || tScript.get(i).getLetterGrade().equals("B+")) {
 						num = 4;
 					}
-					else if(tScript.get(i).getLetterGrade() == "A-" || tScript.get(i).getLetterGrade() == "A" || tScript.get(i).getLetterGrade() == "A+") {
+					else if(tScript.get(i).getLetterGrade().equals("A-") || tScript.get(i).getLetterGrade().equals("A") || tScript.get(i).getLetterGrade().equals("A+")) {
 						num = 5;
 					}
 					else {
@@ -70,21 +70,21 @@ public class Distributions
 		return distribution;
 	}
 	
-	protected Distributions getRawDistributions(TranscriptHandler tHandler) {
+	protected static Distributions getRawDistributions(TranscriptHandler tHandler) {
 		int num = 0;
 		for(int i = 0; i <= tHandler.getList.getSize(); i++) {
-			for(int j = 0; j <= tHandler.getList.getTranscript(j).size(); j++) {
+			for(int j = 0; j <= tHandler.getList.getTranscript(i).size(); j++) {
 				if(tHandler.getList.getTranscript(j).get(j).equals(courseCode.get(i))) {
-					if(tScript.get(i).getLetterGrade() == "F" || tScript.get(i).getLetterGrade() == "D") {
+					if(tScript.get(i).getLetterGrade().equals("F") || tScript.get(i).getLetterGrade().equals("D")) {
 						num = 2;
 					}
-					else if(tScript.get(i).getLetterGrade() == "C" || tScript.get(i).getLetterGrade() == "C+") {
+					else if(tScript.get(i).getLetterGrade().equals("C") || tScript.get(i).getLetterGrade().equals("C+")) {
 						num = 3;
 					}
-					else if(tScript.get(i).getLetterGrade() == "B-" || tScript.get(i).getLetterGrade() == "B" || tScript.get(i).getLetterGrade() == "B+") {
+					else if(tScript.get(i).getLetterGrade().equals("B-") || tScript.get(i).getLetterGrade().equals("B") || tScript.get(i).getLetterGrade().equals("B+")) {
 						num = 4;
 					}
-					else if(tScript.get(i).getLetterGrade() == "A-" || tScript.get(i).getLetterGrade() == "A" || tScript.get(i).getLetterGrade() == "A+") {
+					else if(tScript.get(i).getLetterGrade().equals("A-") || tScript.get(i).getLetterGrade().equals("A") || tScript.get(i).getLetterGrade().equals("A+")) {
 						num = 5;
 					}
 					else {
