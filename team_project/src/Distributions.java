@@ -27,42 +27,33 @@ public class Distributions
 	
 
 	protected static Distributions getAreaDistributions(TranscriptHandler tHandler, Area area) {
-		int num = 0;
 		for(int i = 0; i <= tHandler.getList.getSize(); i++) {
 			for(int j = 0; j <= tHandler.getList.getTranscript(i).size(); j++) {
+				if(!tHandler.getList.getTranscript(j).get(j).equals(courseCode.get(i)) && checkArea(tHandler.getList.getTranscript(j).get(j), area)) {
+					courseCode.add(tScript.get(i).getCourseCode());
+				}
 				if(tHandler.getList.getTranscript(j).get(j).equals(courseCode.get(i))) {
 					if(tScript.get(i).getLetterGrade().equals("F") || tScript.get(i).getLetterGrade().equals("D")) {
-						num = 2;
+						fail = fail + 1;
+						fails.add(fail);
 					}
 					else if(tScript.get(i).getLetterGrade().equals("C") || tScript.get(i).getLetterGrade().equals("C+")) {
-						num = 3;
+						marginal = marginal + 1;
+						marginals.add(marginal);
 					}
 					else if(tScript.get(i).getLetterGrade().equals("B-") || tScript.get(i).getLetterGrade().equals("B") || tScript.get(i).getLetterGrade().equals("B+")) {
-						num = 4;
+						meet = meet + 1;
+						meets.add(meet);
 					}
 					else if(tScript.get(i).getLetterGrade().equals("A-") || tScript.get(i).getLetterGrade().equals("A") || tScript.get(i).getLetterGrade().equals("A+")) {
-						num = 5;
+						exceed = exceed + 1;
+						exceeds.add(exceed);
 					}
 					else {
-						num = 1;
+						other = other + 1;
+						others.add(other);
 					}
 					courseCode.add(tScript.get(i).getCourseCode());
-					switch(num) {
-						case 1: other = other + 1;
-								others.add(other);
-						case 2: fail = fail + 1;
-								fails.add(fail);
-								break;
-						case 3: marginal = marginal + 1;
-								marginals.add(marginal);
-								break;
-						case 4: meet = meet + 1;
-								meets.add(meet);
-								break;
-						case 5: exceed = exceed + 1;
-								exceeds.add(exceed);
-								break; 
-					}
 				}
 			}
 		}
@@ -71,41 +62,31 @@ public class Distributions
 	}
 	
 	protected static Distributions getRawDistributions(TranscriptHandler tHandler) {
-		int num = 0;
 		for(int i = 0; i <= tHandler.getList.getSize(); i++) {
 			for(int j = 0; j <= tHandler.getList.getTranscript(i).size(); j++) {
+				if(!tHandler.getList.getTranscript(j).get(j).equals(courseCode.get(i))) {
+					courseCode.add(tScript.get(i).getCourseCode());
+				}
 				if(tHandler.getList.getTranscript(j).get(j).equals(courseCode.get(i))) {
-					if(tScript.get(i).getLetterGrade().equals("F") || tScript.get(i).getLetterGrade().equals("D")) {
-						num = 2;
+					if(tHandler.getList.getTranscript(j).get(j).equals("F") || tHandler.getList.getTranscript(j).get(j).equals("D")) {
+						fail = fail + 1;
+						fails.add(fail);
 					}
-					else if(tScript.get(i).getLetterGrade().equals("C") || tScript.get(i).getLetterGrade().equals("C+")) {
-						num = 3;
+					else if(tHandler.getList.getTranscript(j).get(j).equals("C") || tHandler.getList.getTranscript(j).get(j).equals("C+")) {
+						marginal = marginal + 1;
+						marginals.add(marginal);
 					}
-					else if(tScript.get(i).getLetterGrade().equals("B-") || tScript.get(i).getLetterGrade().equals("B") || tScript.get(i).getLetterGrade().equals("B+")) {
-						num = 4;
+					else if(tHandler.getList.getTranscript(j).get(j).equals("B-") || tHandler.getList.getTranscript(j).get(j).equals("B") || tHandler.getList.getTranscript(j).get(j).equals("B+")) {
+						meet = meet + 1;
+						meets.add(meet);
 					}
-					else if(tScript.get(i).getLetterGrade().equals("A-") || tScript.get(i).getLetterGrade().equals("A") || tScript.get(i).getLetterGrade().equals("A+")) {
-						num = 5;
+					else if(tHandler.getList.getTranscript(j).get(j).equals("A-") || tHandler.getList.getTranscript(j).get(j).equals("A") || tHandler.getList.getTranscript(j).get(j).equals("A+")) {
+						exceed = exceed + 1;
+						exceeds.add(exceed);
 					}
 					else {
-						num = 1;
-					}
-					courseCode.add(tScript.get(i).getCourseCode());
-					switch(num) {
-						case 1: other = other + 1;
-								others.add(other);
-						case 2: fail = fail + 1;
-								fails.add(fail);
-								break;
-						case 3: marginal = marginal + 1;
-								marginals.add(marginal);
-								break;
-						case 4: meet = meet + 1;
-								meets.add(meet);
-								break;
-						case 5: exceed = exceed + 1;
-								exceeds.add(exceed);
-								break; 
+						other = other + 1;
+						others.add(other);
 					}
 				}
 			}
@@ -133,5 +114,15 @@ public class Distributions
 	
 	public ArrayList<Integer> getExceeds() {
 		return exceeds;
+	}
+	
+	protected static boolean checkArea(Course course, Area area) {
+		boolean result = false;
+		for(int i = 0; i <= area.getAreaList().size(); i++) {
+			if(course.getCourseCode().equals(area.getAreaList().get(i))) {
+				result = true;
+			}
+		}
+		return result;
 	}
 }
