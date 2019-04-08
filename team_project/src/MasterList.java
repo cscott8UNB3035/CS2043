@@ -40,6 +40,7 @@ public class MasterList
 		this.masterList.add(courseCode);
 	}
 	
+	
 	protected void addCourse(int index, String courseCode)
 	{
 		this.masterList.add(index, courseCode);
@@ -50,7 +51,6 @@ public class MasterList
 	{
 		return this.masterList.size();
 	}
-	
 	
 	
 	protected static MasterList showMasterList(MasterList courses, TranscriptHandler cohort)
@@ -124,12 +124,12 @@ public class MasterList
 	}
 	
 	
-	private static MasterList updateMasterList(MasterList courses, TranscriptHandler cohort)
+	private static MasterList updateMasterList(MasterList mList, TranscriptHandler cohort)
 	{
-		if(courses.getSize() == 0)
+		if(mList.getSize() == 0)
 		{
-			courses.addCourse(cohort.getTranscript(0).getCourse(0).getCourseCode());
-			courses.addCourse(null);
+			mList.addCourse(cohort.getTranscript(0).getCourse(0).getCourseCode());
+			mList.addCourse(null);
 		}
 		
 		for(int i=0; i<cohort.getSize(); i++)
@@ -140,19 +140,20 @@ public class MasterList
 			{
 				String newCourse = tScript.getCourse(j).getCourseCode();
 				
-				for(int k=0; k<courses.getSize()+1; k++)
+				for(int k=0; k<mList.getSize(); k++)
 				{
 					try
 					{
-						String mlistCourse = courses.getCourse(k);
+						String mlistCourse = mList.getCourse(k);
 						
 						if(newCourse.equals(mlistCourse)) 
 						{
-							continue;
+							break;
 						}
-						else if(courses.getCourse(j) == null) 
+						
+						if(mlistCourse == null) 
 						{
-							courses.addCourse(k, newCourse);
+							mList.addCourse(k, newCourse);
 							break;
 						}
 					}
@@ -167,7 +168,7 @@ public class MasterList
 		}
 		
 		
-		return courses;
+		return mList;
 	}
 
 	
@@ -187,15 +188,6 @@ public class MasterList
 		
 		sp.setContent(stuff);
 	}
-	
-	
-	/*public String printMasterList() 
-	{
-		String list = null;
-		for(int i = 0; i <= masterList.size(); i++) {
-			list = list + masterList.get(i);
-		}
-		return list;
-	}*/
+
 	
 }
