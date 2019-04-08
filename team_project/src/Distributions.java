@@ -115,6 +115,7 @@ public class Distributions
 	public ArrayList<Integer> getExceeds() {
 		return exceeds;
 	}
+
 	
 	protected static boolean checkArea(Course course, Area area) {
 		boolean result = false;
@@ -126,3 +127,6 @@ public class Distributions
 		return result;
 	}
 }
+
+}
+

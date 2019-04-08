@@ -4,33 +4,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class TestJunit {
-
-    //ConfigGUI test
-	@Test
-    protected static void getCourseEquivPathTest(){
-		openConfig();
-		String result = getCourseEquivPath();
-		closeConfig();
-		assertEquals("C:\\Users\\coby\\Java Workspace\\CS2043\\src\\team_project\\course_equiv\\course_equivalency_list.xlsx", result);
-	}
 	
-	@Test
-    protected static void getTranscriptFolderPathTest(){
-		openConfig();
-		String result = getTranscriptFolderPath();
-		closeConfig();
-		assertEquals("C:\\Users\\coby\\Java Workspace\\CS2043\\src\\team_project\\transcripts\\", result);
-	}
-	
-	@Test
-    protected static void getOutputFolderPathTest(){
-		openConfig();
-		String result = getOutputFolderPath();
-		closeConfig();
-		assertEquals("C:\\Users\\coby\\Java Workspace\\CS2043\\src\\team_project\\output\\", result);
-	}
-	
-	//Course test
 	@Test
 	protected void getCourseCodeTest() {
 		Course c = new Course("APSC1023", "SJ01B", "MECHANICS II", "B-", "5", "2011/WI");
@@ -126,30 +100,5 @@ public class TestJunit {
 		Course c = new Course("APSC1023", "SJ01B", "MECHANICS II", "B-", "5", "2011/WI");
 		String result = c.toString();
 		assertEquals("APSC1023\tSJ01B\tMECHANICS II\tB-\t5\t2011/WI\n", result);
-	}
-	
-	//StatsAndAnalysis test
-	@Test
-    protected static void getNumStudentsPerYearTest(){
-		int result = getNumStudentsPerYear(/*year*/);
-		assertEquals(/*the pre-determined answer*/, result);
-	}
-	
-	@Test
-	protected static void getNumStudentsPerLocationTest() {
-		int result = getNumStudentsPerLocation(/*location*/);
-		assertEquals(/*the pre-determined answer*/, result);
-	}
-	
-	@Test
-	protected static void getNumStudentsInCoursePerYearTest() {
-		int result = getNumStudentsInCoursePerYear(/*courseCode, year*/);
-		assertEquals(/*the pre-determined answer*/, result);
-	}
-	
-	@Test
-	protected static void getNumStudentsInLocationPerYearTest() {
-		int result = getNumStudentsInLocationPerYear(/*location, year*/);
-		assertEquals(/*the pre-determined answer*/, result);
 	}
 }

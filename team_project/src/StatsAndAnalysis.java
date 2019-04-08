@@ -30,12 +30,11 @@ import javafx.stage.Stage;
  * 1. output(filename, var): if all output is standard
  * 2. output(type, var): if all output is categorized
  */
-public class StatsAndAnalysis {
-  
+public class StatsAndAnalysis
+{  
 	private static TranscriptHandler tScriptList;
 
 	
-  
 	protected static int getNumStudetsPerYear(String Year){
 		try
 		{
@@ -127,11 +126,10 @@ public class StatsAndAnalysis {
 	
 	
 	
-	
 	/*
 	 * GUI Component
 	 */
-	protected static void showStatistics(TranscriptHandler cohort)
+	protected static Distributions[] showStatistics(TranscriptHandler cohort, Distributions[] distributions, Area[] areas, MasterList mList)
 	{
 		ConfigGUI.openConfig();
 		tScriptList = cohort;
@@ -192,7 +190,17 @@ public class StatsAndAnalysis {
 		raw.setMaxWidth(175);
 		raw.setOnAction(e ->
 		{
-			//SystemGUI.initializeRawDistributionsList();
+			distributions[0] = getRawDistributions(cohort, mList);
+		});
+		
+		Button area = new Button("Get Area Distribution");
+		area.setMinWidth(175);
+		area.setMaxWidth(175);
+		area.setOnAction(e ->
+		{	
+			
+			
+			//distributions[1] = getAreaDistributions(cohort, a);
 		});
 		
 		
@@ -208,7 +216,7 @@ public class StatsAndAnalysis {
 		stats.setPadding(new Insets(15, 15, 15, 15));
 		stats.setSpacing(15);
 		stats.setAlignment(Pos.CENTER);
-		stats.getChildren().addAll(stat1, stat2, stat3, stat4, raw);
+		stats.getChildren().addAll(stat1, stat2, stat3, stat4, raw, area);
 		
 		
 		HBox bottomButtons = new HBox();
@@ -243,13 +251,18 @@ public class StatsAndAnalysis {
 		
 		window.setScene(scene);
 		window.setTitle("Statistics");
-		window.show();
+		window.showAndWait();
 		
 		// ------------------------------------
+		
+		return distributions;
 	}
 	
 	
 	
+	/*
+	 * GUI Helper-Methods
+	 */
 	protected static void studentsPerYearWindow()
 	{
 		Stage window = new Stage();
@@ -329,7 +342,6 @@ public class StatsAndAnalysis {
 	}
 	
 	
-	
 	protected static void studentsPerLocationWindow()
 	{
 		Stage window = new Stage();
@@ -407,7 +419,6 @@ public class StatsAndAnalysis {
 		window.showAndWait();
 		
 	}
-	
 	
 	
 	protected static void studentsPerCoursePerYearWindow()
@@ -496,7 +507,6 @@ public class StatsAndAnalysis {
 	}
 	
 	
-	
 	protected static void studentsInLocationByYearWindow()
 	{
 		Stage window = new Stage();
@@ -583,10 +593,11 @@ public class StatsAndAnalysis {
 	}
 
 	
-	
+	/*
+	 * Output for statistics
+	 */
 	protected static void output(String sheetName, String rowValueOne, String rowValueTwo, String rowValueThree)
 	{
-		boolean fileFound = false;
 		int currentRow = 0;
 		
 		XSSFWorkbook workbook = null;
@@ -595,15 +606,15 @@ public class StatsAndAnalysis {
 		XSSFCell cell;
 		
 		File file = new File(ConfigGUI.getOutputFolderPath() + "output.xlsx");
+		FileInputStream in = null;
 		FileOutputStream out = null;
 		
 		
 		//check for file
 		try
 		{
-			FileInputStream fis = new FileInputStream(file);
-			workbook = new XSSFWorkbook(fis);
-			fileFound = true;
+			in = new FileInputStream(file);
+			workbook = new XSSFWorkbook(in);
 		}
 		catch(Exception e)
 		{
@@ -630,20 +641,8 @@ public class StatsAndAnalysis {
 		//file now exists. get proper sheet
 		spreadsheet = workbook.getSheet(sheetName);
 		
-		try
-		{
-			currentRow = spreadsheet.getLastRowNum() + 1;
-		}
-		//sheet is empty
-		catch(Exception e)
-		{
-			row = spreadsheet.createRow(currentRow);
-			cell = row.createCell(0);
-			cell.setCellValue(sheetName);
-			currentRow = 2;
-		}
-		
 		//create cells
+		currentRow = spreadsheet.getLastRowNum() + 1;
 		row = spreadsheet.createRow(currentRow);
 		cell = row.createCell(0);
 		cell.setCellValue(rowValueOne);
@@ -656,7 +655,6 @@ public class StatsAndAnalysis {
 		try
 		{
 			workbook.write(out);
-			
 			out.close();
 			workbook.close();
 		}
@@ -664,6 +662,239 @@ public class StatsAndAnalysis {
 		{
 			AlertBox.displayAlert("Error", "Could not write to excel file.");
 		}
+		
+		try
+		{
+			in.close();
+		}
+		catch(Exception e)
+		{
+			
+		}
+		
 	}
+	
+	
+	protected static Distributions getAreaDistributions(TranscriptHandler tHandler, Area area) 
+	{
+		ArrayList<String> courseCode = new ArrayList<String>();
+		courseCode.add(null);
+		ArrayList<Integer> others = new ArrayList<Integer>();
+		int other = 0;
+		ArrayList<Integer> fails = new ArrayList<Integer>();
+		int fail = 0;
+		ArrayList<Integer> marginals = new ArrayList<Integer>();
+		int marginal = 0;
+		ArrayList<Integer> meets = new ArrayList<Integer>();
+		int meet = 0;
+		ArrayList<Integer> exceeds = new ArrayList<Integer>();
+		int exceed = 0;
+		
+		int num = 0;
+		
+		for(int i = 0; i <= tHandler.getSize(); i++) 
+		{
+			Transcript tScript = tHandler.getTranscript(i);
+			
+			for(int j = 0; j <= tScript.getSize(); j++)
+			{
+				if(tScript.getCourse(j).equals(courseCode.get(i))) 
+				{
+					String letterGrade = tScript.getCourse(j).getLetterGrade();
+					
+					if(tScript.getCourse(i).getLetterGrade().equals("F") || tScript.getCourse(i).getLetterGrade().equals("D")) {
+						num = 2;
+					}
+					else if(letterGrade.equals("C") || letterGrade.equals("C+")) {
+						num = 3;
+					}
+					else if(letterGrade.equals("B-") || letterGrade.equals("B") || letterGrade.equals("B+")) {
+						num = 4;
+					}
+					else if(letterGrade.equals("A-") || letterGrade.equals("A") || letterGrade.equals("A+")) {
+						num = 5;
+					}
+					else {
+						num = 1;
+					}
+					
+					courseCode.add(tScript.getCourse(i).getCourseCode());
+					switch(num) {
+						case 1: other = other + 1;
+								others.add(other);
+						case 2: fail = fail + 1;
+								fails.add(fail);
+								break;
+						case 3: marginal = marginal + 1;
+								marginals.add(marginal);
+								break;
+						case 4: meet = meet + 1;
+								meets.add(meet);
+								break;
+						case 5: exceed = exceed + 1;
+								exceeds.add(exceed);
+								break; 
+					}
+				}
+			}
+		}
+		
+		Distributions distribution = new Distributions(courseCode, others, fails, marginals, meets, exceeds);
+		return distribution;
+	}
+	
+	
+	protected static Distributions getRawDistributions(TranscriptHandler tHandler, MasterList mList) 
+	{
+		ArrayList<String> courseCode = mList.getMasterList();
+		courseCode.add(null);
+		ArrayList<Integer> others = new ArrayList<Integer>();
+		int other = 0;
+		ArrayList<Integer> fails = new ArrayList<Integer>();
+		int fail = 0;
+		ArrayList<Integer> marginals = new ArrayList<Integer>();
+		int marginal = 0;
+		ArrayList<Integer> meets = new ArrayList<Integer>();
+		int meet = 0;
+		ArrayList<Integer> exceeds = new ArrayList<Integer>();
+		int exceed = 0;
+		
+		int num = 0;
+		
+		for(int i = 0; i < tHandler.getSize(); i++) 
+		{
+			Transcript tScript = tHandler.getTranscript(i);
+			
+			for(int j = 0; j < tScript.getSize(); j++) 
+			{
+				String letterGrade = tScript.getCourse(j).getLetterGrade();
+				
+				for(int k=0; k<courseCode.size(); k++)
+				{
+					
+					if(tScript.getCourse(j).equals(courseCode.get(k)))  
+					{
+						if(letterGrade.equals("F") || letterGrade.equals("D")) {
+							num = 2;
+						}
+						else if(letterGrade.equals("C") || letterGrade.equals("C+")) {
+							num = 3;
+						}
+						else if(letterGrade.equals("B-") || letterGrade.equals("B") || letterGrade.equals("B+")) {
+							num = 4;
+						}
+						else if(letterGrade.equals("A-") || letterGrade.equals("A") || letterGrade.equals("A+")) {
+							num = 5;
+						}
+						else {
+							num = 1;
+						}
+						
+						courseCode.add(tScript.getCourse(i).getCourseCode());
+						switch(num) {
+							case 1: other = other + 1;
+									others.add(other);
+							case 2: fail = fail + 1;
+									fails.add(fail);
+									break;
+							case 3: marginal = marginal + 1;
+									marginals.add(marginal);
+									break;
+							case 4: meet = meet + 1;
+									meets.add(meet);
+									break;
+							case 5: exceed = exceed + 1;
+									exceeds.add(exceed);
+									break; 
+						}
+					}
+				}
+			}
+		}
+		Distributions distribution = new Distributions(courseCode, others, fails, marginals, meets, exceeds);
+		return distribution;
+	}
+	
+	
+	protected static void outputDistributions(Distributions[] distributions)
+	{
+		
+	}
+	
+	
+	protected static void selectArea(Area[] areas)
+	{
+		Stage window = new Stage();
+		Scene scene;
+		
+		
+		
+		Text enterArea = new Text("Enter Area:");
+		enterArea.setFont(Font.font(14));
+		
+		TextField areaField = new TextField();
+		areaField.setMinWidth(75);
+		areaField.setMaxWidth(75);
+		
+		Button ok = new Button("OK");
+		ok.setOnAction(e ->
+		{
+			
+		});
+		
+		Button cancel = new Button("Cancel");
+		cancel.setOnAction(e ->
+		{
+			boolean answer = ConfirmBox.display("Cancel", "Are you sure you want to go back?");
+			if(answer)
+			{
+				window.close();
+			}
+		});
+		
+		
+		
+		VBox contents = new VBox();
+		contents.setPadding(new Insets(10,10,10,10));
+		contents.setSpacing(10);
+		contents.setAlignment(Pos.CENTER);
+		contents.getChildren().addAll(enterArea, areaField);
+		
+		VBox bottomButtons = new VBox();
+		bottomButtons.setPadding(new Insets(10,10,10,10));
+		bottomButtons.setSpacing(10);
+		bottomButtons.setAlignment(Pos.CENTER);
+		bottomButtons.getChildren().addAll(ok, cancel);
+		
+		BorderPane layout = new BorderPane();
+		layout.setCenter(contents);
+		layout.setBottom(bottomButtons);
+		
+		
+		
+		
+		//define scene
+		scene = new Scene(layout, 225, 310);
+		
+		
+		
+		// ----- Window Properties -----
+		
+		window.setOnCloseRequest(e -> 
+		{
+			e.consume();
+			boolean answer = ConfirmBox.display("Cancel", "Are you sure you want to go back?");
+			if(answer)
+			{
+				window.close();
+			}
+		});
+		
+		window.setScene(scene);
+		window.setTitle("Students By Year");
+		window.showAndWait();
+		
+	}
+	
 	
 }
