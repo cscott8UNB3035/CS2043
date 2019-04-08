@@ -70,7 +70,7 @@ public class SystemGUI extends Application
 		stats.setMaxWidth(130);
 		stats.setOnAction(e ->
 		{
-			distributions = StatsAndAnalysis.showStatistics(tScriptList, distributions, areas);
+			distributions = StatsAndAnalysis.showStatistics(tScriptList, distributions, areas, masterCourseList);
 		});
 		
 		

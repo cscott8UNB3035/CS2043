@@ -129,7 +129,7 @@ public class StatsAndAnalysis
 	/*
 	 * GUI Component
 	 */
-	protected static Distributions[] showStatistics(TranscriptHandler cohort, Distributions[] distributions, Area[] areas)
+	protected static Distributions[] showStatistics(TranscriptHandler cohort, Distributions[] distributions, Area[] areas, MasterList mList)
 	{
 		ConfigGUI.openConfig();
 		tScriptList = cohort;
@@ -190,7 +190,7 @@ public class StatsAndAnalysis
 		raw.setMaxWidth(175);
 		raw.setOnAction(e ->
 		{
-			distributions[0] = getRawDistributions(cohort);
+			distributions[0] = getRawDistributions(cohort, mList);
 		});
 		
 		Button area = new Button("Get Area Distribution");
@@ -673,12 +673,12 @@ public class StatsAndAnalysis
 		}
 		
 	}
-
+	
 	
 	protected static Distributions getAreaDistributions(TranscriptHandler tHandler, Area area) 
 	{
 		ArrayList<String> courseCode = new ArrayList<String>();
-		courseCode.addAll(null);
+		courseCode.add(null);
 		ArrayList<Integer> others = new ArrayList<Integer>();
 		int other = 0;
 		ArrayList<Integer> fails = new ArrayList<Integer>();
@@ -690,32 +690,31 @@ public class StatsAndAnalysis
 		ArrayList<Integer> exceeds = new ArrayList<Integer>();
 		int exceed = 0;
 		
-		
-		
 		int num = 0;
+		
 		for(int i = 0; i <= tHandler.getSize(); i++) 
 		{
-			for(int j = 0; j <= tHandler.getTranscript(j).getSize(); j++) 
+			Transcript tScript = tHandler.getTranscript(i);
+			
+			for(int j = 0; j <= tScript.getSize(); j++)
 			{
-				Transcript tScript = tHandler.getTranscript(j);
-				
-				if(tScript.getCourse(j).getCourseCode().equals(courseCode.get(i))) 
+				if(tScript.getCourse(j).equals(courseCode.get(i))) 
 				{
+					String letterGrade = tScript.getCourse(j).getLetterGrade();
 					
-					if(tScript.getCourse(i).getLetterGrade() == "F" || tScript.getCourse(i).getLetterGrade() == "D") {
+					if(tScript.getCourse(i).getLetterGrade().equals("F") || tScript.getCourse(i).getLetterGrade().equals("D")) {
 						num = 2;
 					}
-					else if(tScript.getCourse(i).getLetterGrade() == "C" || tScript.getCourse(i).getLetterGrade() == "C+") {
+					else if(letterGrade.equals("C") || letterGrade.equals("C+")) {
 						num = 3;
 					}
-					else if(tScript.getCourse(i).getLetterGrade() == "B-" || tScript.getCourse(i).getLetterGrade() == "B" || tScript.getCourse(i).getLetterGrade() == "B+") {
+					else if(letterGrade.equals("B-") || letterGrade.equals("B") || letterGrade.equals("B+")) {
 						num = 4;
 					}
-					else if(tScript.getCourse(i).getLetterGrade() == "A-" || tScript.getCourse(i).getLetterGrade() == "A" || tScript.getCourse(i).getLetterGrade() == "A+") {
+					else if(letterGrade.equals("A-") || letterGrade.equals("A") || letterGrade.equals("A+")) {
 						num = 5;
 					}
-					else 
-					{
+					else {
 						num = 1;
 					}
 					
@@ -739,14 +738,15 @@ public class StatsAndAnalysis
 				}
 			}
 		}
+		
 		Distributions distribution = new Distributions(courseCode, others, fails, marginals, meets, exceeds);
 		return distribution;
 	}
 	
 	
-	protected static Distributions getRawDistributions(TranscriptHandler tHandler) 
+	protected static Distributions getRawDistributions(TranscriptHandler tHandler, MasterList mList) 
 	{
-		ArrayList<String> courseCode = new ArrayList<String>();
+		ArrayList<String> courseCode = mList.getMasterList();
 		courseCode.add(null);
 		ArrayList<Integer> others = new ArrayList<Integer>();
 		int other = 0;
@@ -759,31 +759,31 @@ public class StatsAndAnalysis
 		ArrayList<Integer> exceeds = new ArrayList<Integer>();
 		int exceed = 0;
 		
-		
 		int num = 0;
-		for(int i=0; i < tHandler.getSize(); i++)
+		
+		for(int i = 0; i < tHandler.getSize(); i++) 
 		{
 			Transcript tScript = tHandler.getTranscript(i);
 			
-			for(int j=0; j < tScript.getSize(); j++) 
+			for(int j = 0; j < tScript.getSize(); j++) 
 			{
-				Course c = tScript.getCourse(j);
+				String letterGrade = tScript.getCourse(j).getLetterGrade();
 				
-				for(int k=0; k < courseCode.size(); k++)
+				for(int k=0; k<courseCode.size(); k++)
 				{
-					String ccCourse = courseCode.get(k);
 					
-					if(c.getCourseCode().equals(ccCourse)) {
-						if(tScript.getCourse(i).getLetterGrade() == "F" || tScript.getCourse(i).getLetterGrade() == "D") {
+					if(tScript.getCourse(j).equals(courseCode.get(k)))  
+					{
+						if(letterGrade.equals("F") || letterGrade.equals("D")) {
 							num = 2;
 						}
-						else if(tScript.getCourse(i).getLetterGrade() == "C" || tScript.getCourse(i).getLetterGrade() == "C+") {
+						else if(letterGrade.equals("C") || letterGrade.equals("C+")) {
 							num = 3;
 						}
-						else if(tScript.getCourse(i).getLetterGrade() == "B-" || tScript.getCourse(i).getLetterGrade() == "B" || tScript.getCourse(i).getLetterGrade() == "B+") {
+						else if(letterGrade.equals("B-") || letterGrade.equals("B") || letterGrade.equals("B+")) {
 							num = 4;
 						}
-						else if(tScript.getCourse(i).getLetterGrade() == "A-" || tScript.getCourse(i).getLetterGrade() == "A" || tScript.getCourse(i).getLetterGrade() == "A+") {
+						else if(letterGrade.equals("A-") || letterGrade.equals("A") || letterGrade.equals("A+")) {
 							num = 5;
 						}
 						else {

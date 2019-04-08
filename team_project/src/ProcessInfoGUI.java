@@ -103,6 +103,8 @@ public class ProcessInfoGUI
 			{
 				 processTranscripts(cohort);
 			}
+			
+			window.close();
 		});
 		
 		Button changeName = new Button("Change File Name");
