@@ -33,6 +33,8 @@ import javafx.stage.Stage;
 public class StatsAndAnalysis
 {  
 	private static TranscriptHandler tScriptList;
+	private static Stage window;
+	private static Area chosenArea;
 
 	
 	protected static int getNumStudetsPerYear(String Year){
@@ -191,6 +193,8 @@ public class StatsAndAnalysis
 		raw.setOnAction(e ->
 		{
 			distributions[0] = getRawDistributions(cohort, mList);
+			
+			outputRawDistributions(distributions[0]);
 		});
 		
 		Button area = new Button("Get Area Distribution");
@@ -198,9 +202,10 @@ public class StatsAndAnalysis
 		area.setMaxWidth(175);
 		area.setOnAction(e ->
 		{	
+			Area a = selectArea(areas);
+			distributions[1] = getAreaDistributions(cohort, a);
 			
-			
-			//distributions[1] = getAreaDistributions(cohort, a);
+			//outputAreaDistributions(distributions[1]);
 		});
 		
 		
@@ -257,12 +262,12 @@ public class StatsAndAnalysis
 		
 		return distributions;
 	}
-	
-	
-	
-	/*
-	 * GUI Helper-Methods
-	 */
+		
+		
+		
+		/*
+		 * GUI Helper-Methods
+		 */
 	protected static void studentsPerYearWindow()
 	{
 		Stage window = new Stage();
@@ -338,6 +343,7 @@ public class StatsAndAnalysis
 		window.setScene(scene);
 		window.setTitle("Students By Year");
 		window.showAndWait();
+		
 		
 	}
 	
@@ -744,7 +750,7 @@ public class StatsAndAnalysis
 	}
 	
 	
-	protected static Distributions getRawDistributions(TranscriptHandler tHandler, MasterList mList) 
+	protected static Distributions getRawDistributions(TranscriptHandler tHandler, MasterList mList)
 	{
 		ArrayList<String> courseCode = mList.getMasterList();
 		courseCode.add(null);
@@ -759,54 +765,41 @@ public class StatsAndAnalysis
 		ArrayList<Integer> exceeds = new ArrayList<Integer>();
 		int exceed = 0;
 		
-		int num = 0;
-		
-		for(int i = 0; i < tHandler.getSize(); i++) 
+		for(int i = 0; i < tHandler.getSize(); i++)
 		{
 			Transcript tScript = tHandler.getTranscript(i);
 			
-			for(int j = 0; j < tScript.getSize(); j++) 
+			for(int j = 0; j < tScript.getSize(); j++)
 			{
-				String letterGrade = tScript.getCourse(j).getLetterGrade();
+				Course tCourse = tScript.getCourse(j);
 				
-				for(int k=0; k<courseCode.size(); k++)
+				for(int k=0; k<mList.getSize(); k++)
 				{
-					
-					if(tScript.getCourse(j).equals(courseCode.get(k)))  
+					if(tCourse.getCourseCode().equals(mList.getCourse(k)))	//if course from transcript is equal to course in mList
 					{
-						if(letterGrade.equals("F") || letterGrade.equals("D")) {
-							num = 2;
-						}
-						else if(letterGrade.equals("C") || letterGrade.equals("C+")) {
-							num = 3;
-						}
-						else if(letterGrade.equals("B-") || letterGrade.equals("B") || letterGrade.equals("B+")) {
-							num = 4;
-						}
-						else if(letterGrade.equals("A-") || letterGrade.equals("A") || letterGrade.equals("A+")) {
-							num = 5;
-						}
-						else {
-							num = 1;
-						}
+						String tGrade = tCourse.getLetterGrade();
+							
+							if(tGrade.equals("F") || tGrade.equals("D")) {
+								fail = fail + 1;
+								fails.add(fail);
+							}
+							else if(tGrade.equals("C") || tGrade.equals("C+")) {
+								marginal = marginal + 1;
+								marginals.add(marginal);
+							}
+							else if(tGrade.equals("B-") || tGrade.equals("B") || tGrade.equals("B+")) {
+								meet = meet + 1;
+								meets.add(meet);
+							}
+							else if(tGrade.equals("A-") || tGrade.equals("A") || tGrade.equals("A+")) {
+								exceed = exceed + 1;
+								exceeds.add(exceed);
+							}
+							else {
+								other = other + 1;
+								others.add(other);
+							}
 						
-						courseCode.add(tScript.getCourse(i).getCourseCode());
-						switch(num) {
-							case 1: other = other + 1;
-									others.add(other);
-							case 2: fail = fail + 1;
-									fails.add(fail);
-									break;
-							case 3: marginal = marginal + 1;
-									marginals.add(marginal);
-									break;
-							case 4: meet = meet + 1;
-									meets.add(meet);
-									break;
-							case 5: exceed = exceed + 1;
-									exceeds.add(exceed);
-									break; 
-						}
 					}
 				}
 			}
@@ -816,16 +809,279 @@ public class StatsAndAnalysis
 	}
 	
 	
-	protected static void outputDistributions(Distributions[] distributions)
+	protected static void outputRawDistributions(Distributions dist)
 	{
+		XSSFWorkbook workbook = null;
+		XSSFSheet spreadsheet = null;
+		XSSFRow row;
+		XSSFCell cell;
 		
+		File file = new File(ConfigGUI.getOutputFolderPath() + "distributions.xlsx");
+		FileInputStream in = null;
+		FileOutputStream out = null;
+		
+		
+		//check for file
+		try
+		{
+			in = new FileInputStream(file);
+			workbook = new XSSFWorkbook(in);
+		}
+		catch(Exception e)
+		{
+			AlertBox.displayAlert("Attention", "Distributions file does not exist. New file will be created.");
+			workbook = new XSSFWorkbook();
+			
+			spreadsheet = workbook.createSheet("Raw Distributions");
+			spreadsheet = workbook.createSheet("Area Distributions");
+		} 
+		
+		
+		
+		// set output stream
+		try
+		{
+			out = new FileOutputStream(file);
+		}
+		catch(Exception e)
+		{
+			AlertBox.displayAlert("Error", "Could not set File Output Stream.");
+		}
+		
+		//file now exists. get proper sheet
+		spreadsheet = workbook.getSheet("Raw Distributions");
+		
+		
+		//create headers
+		row = spreadsheet.createRow(0);
+		
+		cell = row.createCell(0);
+		cell.setCellValue("Course");
+		
+		cell = row.createCell(1);
+		cell.setCellValue("Others");
+		
+		cell = row.createCell(2);
+		cell.setCellValue("Fails");
+		
+		cell = row.createCell(3);
+		cell.setCellValue("Marginals");
+		
+		cell = row.createCell(4);
+		cell.setCellValue("Meets");
+		
+		cell = row.createCell(5);
+		cell.setCellValue("Exceeds");
+		
+		
+		//add data
+		for(int i=0; i<dist.getCourseCode().size(); i++)
+		{
+			row = spreadsheet.createRow(i+1);
+			
+			try
+			{
+				cell = row.createCell(0);
+				cell.setCellValue(dist.getCourseCode().get(i));
+			}
+			catch(Exception e)
+			{
+				
+			}
+			
+			try
+			{
+				cell = row.createCell(1);
+				cell.setCellValue(dist.getOthers().get(i));
+			}
+			catch(Exception e)
+			{
+				
+			}	
+				
+			try
+			{
+				cell = row.createCell(2);
+				cell.setCellValue(dist.getFails().get(i));
+			}
+			catch(Exception e)
+			{
+				
+			}
+			
+			try
+			{
+				cell = row.createCell(3);
+				cell.setCellValue(dist.getMarginals().get(i));
+			}
+			catch(Exception e)
+			{
+				
+			}
+				
+			try
+			{
+				cell = row.createCell(4);
+				cell.setCellValue(dist.getMeets().get(i));
+			}
+			catch(Exception e)
+			{
+				
+			}
+				
+			try
+			{
+				cell = row.createCell(5);
+				cell.setCellValue(dist.getExceeds().get(i));
+			}
+			catch(Exception e)
+			{
+				
+			}
+		}
+		
+		
+		//write new data to excel file
+		try
+		{
+			workbook.write(out);
+			out.close();
+			workbook.close();
+		}
+		catch(Exception e)
+		{
+			AlertBox.displayAlert("Error", "Could not write to excel file.");
+		}
+		
+		try
+		{
+			in.close();
+		}
+		catch(Exception e)
+		{
+					
+		}
+	}
+
+	
+	protected static void outputAreaDistributions(Distributions dist)
+	{
+		XSSFWorkbook workbook = null;
+		XSSFSheet spreadsheet = null;
+		XSSFRow row;
+		XSSFCell cell;
+		
+		File file = new File(ConfigGUI.getOutputFolderPath() + "distributions.xlsx");
+		FileInputStream in = null;
+		FileOutputStream out = null;
+		
+		
+		//check for file
+		try
+		{
+			in = new FileInputStream(file);
+			workbook = new XSSFWorkbook(in);
+		}
+		catch(Exception e)
+		{
+			AlertBox.displayAlert("Attention", "Distributions file does not exist. New file will be created.");
+			workbook = new XSSFWorkbook();
+			
+			spreadsheet = workbook.createSheet("Raw Distributions");
+			spreadsheet = workbook.createSheet("Area Distributions");
+		} 
+		
+		
+		
+		// set output stream
+		try
+		{
+			out = new FileOutputStream(file);
+		}
+		catch(Exception e)
+		{
+			AlertBox.displayAlert("Error", "Could not set File Output Stream.");
+		}
+		
+		//file now exists. get proper sheet
+		spreadsheet = workbook.getSheet("Area Distributions");
+		
+		
+		//create headers
+		row = spreadsheet.createRow(0);
+		
+		cell = row.createCell(0);
+		cell.setCellValue("Course");
+		
+		cell = row.createCell(1);
+		cell.setCellValue("Others");
+		
+		cell = row.createCell(2);
+		cell.setCellValue("Fails");
+		
+		cell = row.createCell(3);
+		cell.setCellValue("Marginals");
+		
+		cell = row.createCell(4);
+		cell.setCellValue("Meets");
+		
+		cell = row.createCell(5);
+		cell.setCellValue("Exceeds");
+		
+		
+		//add data
+		for(int i=0; i<dist.getCourseCode().size(); i++)
+		{
+			row = spreadsheet.createRow(i+1);
+			
+			cell = row.createCell(0);
+			cell.setCellValue(dist.getCourseCode().get(i));
+			
+			cell = row.createCell(1);
+			cell.setCellValue(dist.getOthers().get(i));
+			
+			cell = row.createCell(2);
+			cell.setCellValue(dist.getFails().get(i));
+			
+			cell = row.createCell(3);
+			cell.setCellValue(dist.getMarginals().get(i));
+			
+			cell = row.createCell(4);
+			cell.setCellValue(dist.getMeets().get(i));
+			
+			cell = row.createCell(5);
+			cell.setCellValue(dist.getExceeds().get(i));
+		}
+		
+		
+		//write new data to excel file
+		try
+		{
+			workbook.write(out);
+			out.close();
+			workbook.close();
+		}
+		catch(Exception e)
+		{
+			AlertBox.displayAlert("Error", "Could not write to excel file.");
+		}
+		
+		try
+		{
+			in.close();
+		}
+		catch(Exception e)
+		{
+					
+		}
 	}
 	
 	
-	protected static void selectArea(Area[] areas)
+	protected static Area selectArea(Area[] areas)
 	{
 		Stage window = new Stage();
 		Scene scene;
+		chosenArea = null;
 		
 		
 		
@@ -839,7 +1095,13 @@ public class StatsAndAnalysis
 		Button ok = new Button("OK");
 		ok.setOnAction(e ->
 		{
-			
+			for(int i=0; i<areas.length; i++)
+			{
+				if(areas[i].getAreaName().equals(areaField.getText()))
+				{
+					chosenArea = areas[i];
+				}
+			}
 		});
 		
 		Button cancel = new Button("Cancel");
@@ -894,6 +1156,7 @@ public class StatsAndAnalysis
 		window.setTitle("Students By Year");
 		window.showAndWait();
 		
+		return chosenArea;
 	}
 	
 	

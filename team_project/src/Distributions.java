@@ -19,6 +19,7 @@ public class Distributions
 	public Distributions(ArrayList<String> courseCode, ArrayList<Integer> others, ArrayList<Integer> fails, ArrayList<Integer> marginals, ArrayList<Integer> meets, ArrayList<Integer> exceeds)
 	{
 		this.courseCode = courseCode;
+		this.others = others;
 		this.fails = fails;
 		this.marginals = marginals;
 		this.meets = meets;
@@ -26,7 +27,10 @@ public class Distributions
 	}
 	
 
-	protected static Distributions getAreaDistributions(TranscriptHandler tHandler, Area area) {
+	protected static Distributions getAreaDistributions(TranscriptHandler tHandler, Area area)
+	{
+		
+		
 		for(int i = 0; i <= tHandler.getList.getSize(); i++) {
 			for(int j = 0; j <= tHandler.getList.getTranscript(i).size(); j++) {
 				if(!tHandler.getList.getTranscript(j).get(j).equals(courseCode.get(i)) && checkArea(tHandler.getList.getTranscript(j).get(j), area)) {
@@ -61,40 +65,6 @@ public class Distributions
 		return distribution;
 	}
 	
-	protected static Distributions getRawDistributions(TranscriptHandler tHandler) {
-		for(int i = 0; i <= tHandler.getList.getSize(); i++) {
-			for(int j = 0; j <= tHandler.getList.getTranscript(i).size(); j++) {
-				if(!tHandler.getList.getTranscript(j).get(j).equals(courseCode.get(i))) {
-					courseCode.add(tScript.get(i).getCourseCode());
-				}
-				if(tHandler.getList.getTranscript(j).get(j).equals(courseCode.get(i))) {
-					if(tHandler.getList.getTranscript(j).get(j).equals("F") || tHandler.getList.getTranscript(j).get(j).equals("D")) {
-						fail = fail + 1;
-						fails.add(fail);
-					}
-					else if(tHandler.getList.getTranscript(j).get(j).equals("C") || tHandler.getList.getTranscript(j).get(j).equals("C+")) {
-						marginal = marginal + 1;
-						marginals.add(marginal);
-					}
-					else if(tHandler.getList.getTranscript(j).get(j).equals("B-") || tHandler.getList.getTranscript(j).get(j).equals("B") || tHandler.getList.getTranscript(j).get(j).equals("B+")) {
-						meet = meet + 1;
-						meets.add(meet);
-					}
-					else if(tHandler.getList.getTranscript(j).get(j).equals("A-") || tHandler.getList.getTranscript(j).get(j).equals("A") || tHandler.getList.getTranscript(j).get(j).equals("A+")) {
-						exceed = exceed + 1;
-						exceeds.add(exceed);
-					}
-					else {
-						other = other + 1;
-						others.add(other);
-					}
-				}
-			}
-		}
-		Distributions distribution = new Distributions(courseCode, others, fails, marginals, meets, exceeds);
-		return distribution;
-	}
-	
 	
 	public ArrayList<String> getCourseCode() {
 		return courseCode;
@@ -115,7 +85,11 @@ public class Distributions
 	public ArrayList<Integer> getExceeds() {
 		return exceeds;
 	}
-
+	
+	public ArrayList<Integer> getOthers()
+	{
+		return others;
+	}
 	
 	protected static boolean checkArea(Course course, Area area) {
 		boolean result = false;
@@ -127,6 +101,3 @@ public class Distributions
 		return result;
 	}
 }
-
-}
-
