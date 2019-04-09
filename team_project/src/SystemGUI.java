@@ -61,7 +61,7 @@ public class SystemGUI extends Application
 		process.setMaxWidth(130);
 		process.setOnAction(e ->
 		{
-			tScriptList = ProcessInfoGUI.showDataProcessor(tScriptList);
+			tScriptList = ProcessInfoGUI.showDataProcessor(masterCourseList, tScriptList);
 		});
 		
 		

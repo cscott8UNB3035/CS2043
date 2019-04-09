@@ -77,7 +77,7 @@ public class ProcessInfoGUI
 	
 	//GUI Functionality
 	
-	protected static TranscriptHandler showDataProcessor(TranscriptHandler cohort)
+	protected static TranscriptHandler showDataProcessor(MasterList mList, TranscriptHandler cohort)
 	{
 		ConfigGUI.openConfig();
 		tScriptList = cohort;
@@ -104,6 +104,7 @@ public class ProcessInfoGUI
 				 processTranscripts(cohort);
 			}
 			
+			MasterList.updateMasterList(mList, cohort);
 			window.close();
 		});
 		
@@ -218,10 +219,10 @@ public class ProcessInfoGUI
 		
 		
 		
-		Text enterFileName = new Text("Enter Transcript File Name (exit to leave as default):");
+		Text enterFileName = new Text("Enter Transcript File Name, or press exit to leave as default:");
 		enterFileName.setFont(Font.font(14));
 		
-		Text help = new Text("(Make sure to omit numbers, symbols, and the file extension)");
+		Text help = new Text("Make sure to omit all numbers (except the year), symbols, and the file extension.");
 		help.setFont(Font.font(11));
 		
 		TextField fileNameField = new TextField();
@@ -284,7 +285,7 @@ public class ProcessInfoGUI
 		});
 		
 		window.setScene(scene);
-		window.setTitle("Students By Location");
+		window.setTitle("Enter Transcript File-Name");
 		window.showAndWait();
 	}
 	

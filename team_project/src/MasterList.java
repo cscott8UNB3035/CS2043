@@ -111,7 +111,6 @@ public class MasterList
 		
 		window.setOnShowing(e -> 
 		{
-			updateMasterList(courses, cohort);
 			updateMasterListWindow(data, courses);
 		});
 		
@@ -124,7 +123,7 @@ public class MasterList
 	}
 	
 	
-	private static MasterList updateMasterList(MasterList mList, TranscriptHandler cohort)
+	protected static MasterList updateMasterList(MasterList mList, TranscriptHandler cohort)
 	{
 		if(mList.getSize() == 0)
 		{

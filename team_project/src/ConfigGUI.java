@@ -208,7 +208,7 @@ public class ConfigGUI
 		Text configText = new Text();
 		
 		
-		Button changeOutputPath = new Button("Change Output Path");
+		/*Button changeOutputPath = new Button("Change Output Path");
 		changeOutputPath.setMinWidth(130);
 		changeOutputPath.setMaxWidth(130);
 		changeOutputPath.setOnAction(e -> 
@@ -239,7 +239,7 @@ public class ConfigGUI
 		{
 			//changeTranscriptSrc()
 			updateConfigText(configText);
-		});
+		});*/
 		
 		
 		Button back = new Button("Back");
@@ -268,7 +268,8 @@ public class ConfigGUI
 		bottomButtons.setPadding(new Insets(15, 15, 15, 15));
 		bottomButtons.setSpacing(15);
 		bottomButtons.setAlignment(Pos.CENTER);
-		bottomButtons.getChildren().addAll(changeOutputPath, changeCourseEquivSrc, changeTranscriptSrc, back);
+		bottomButtons.getChildren().addAll(back);
+		//bottomButtons.getChildren().addAll(changeOutputPath, changeCourseEquivSrc, changeTranscriptSrc, back);
 		
 		
 		
@@ -279,7 +280,7 @@ public class ConfigGUI
 		
 		
 		
-		scene = new Scene(layout, 550, 500);
+		scene = new Scene(layout, 600, 500);
 		
 		// -------------------------------------
 		
