@@ -236,7 +236,7 @@ public class StatsAndAnalysis
 		layout.setCenter(stats);
 		layout.setBottom(bottomButtons);
 		
-		scene = new Scene(layout, 250, 350);
+		scene = new Scene(layout, 250, 400);
 		
 		// -------------------------------------
 		
@@ -753,17 +753,22 @@ public class StatsAndAnalysis
 	protected static Distributions getRawDistributions(TranscriptHandler tHandler, MasterList mList)
 	{
 		ArrayList<String> courseCode = mList.getMasterList();
-		courseCode.add(null);
 		ArrayList<Integer> others = new ArrayList<Integer>();
-		int other = 0;
 		ArrayList<Integer> fails = new ArrayList<Integer>();
-		int fail = 0;
 		ArrayList<Integer> marginals = new ArrayList<Integer>();
-		int marginal = 0;
 		ArrayList<Integer> meets = new ArrayList<Integer>();
-		int meet = 0;
 		ArrayList<Integer> exceeds = new ArrayList<Integer>();
-		int exceed = 0;
+		
+		for(int i=0; i<mList.getSize(); i++)
+		{
+			others.add(i, 0);
+			fails.add(i, 0);
+			marginals.add(i, 0);
+			meets.add(i, 0);
+			exceeds.add(i, 0);
+		}
+
+		
 		
 		for(int i = 0; i < tHandler.getSize(); i++)
 		{
@@ -778,26 +783,33 @@ public class StatsAndAnalysis
 					if(tCourse.getCourseCode().equals(mList.getCourse(k)))	//if course from transcript is equal to course in mList
 					{
 						String tGrade = tCourse.getLetterGrade();
-							
+						
+						int other=0, fail=0, marginal=0, meet=0, exceed=0;	
+						
+						try{	other = others.get(k);		 } catch(Exception e) {}
+						try{	fail = fails.get(k);		 } catch(Exception e) {}
+						try{	marginal = marginals.get(k); } catch(Exception e) {}
+						try{	exceed = exceeds.get(k);	 } catch(Exception e) {}
+						
 							if(tGrade.equals("F") || tGrade.equals("D")) {
-								fail = fail + 1;
-								fails.add(fail);
+								fail++;
+								fails.set(k,fail);
 							}
 							else if(tGrade.equals("C") || tGrade.equals("C+")) {
-								marginal = marginal + 1;
-								marginals.add(marginal);
+								marginal++;
+								marginals.set(k,marginal);
 							}
 							else if(tGrade.equals("B-") || tGrade.equals("B") || tGrade.equals("B+")) {
-								meet = meet + 1;
-								meets.add(meet);
+								meet++;
+								meets.set(k,meet);
 							}
 							else if(tGrade.equals("A-") || tGrade.equals("A") || tGrade.equals("A+")) {
-								exceed = exceed + 1;
-								exceeds.add(exceed);
+								exceed++;
+								exceeds.set(k,exceed);
 							}
 							else {
-								other = other + 1;
-								others.add(other);
+								other++;
+								others.set(k,other);
 							}
 						
 					}
@@ -1011,7 +1023,7 @@ public class StatsAndAnalysis
 		row = spreadsheet.createRow(0);
 		
 		cell = row.createCell(0);
-		cell.setCellValue("Course");
+		cell.setCellValue("Area");
 		
 		cell = row.createCell(1);
 		cell.setCellValue("Others");
@@ -1030,27 +1042,27 @@ public class StatsAndAnalysis
 		
 		
 		//add data
-		for(int i=0; i<dist.getCourseCode().size(); i++)
+		for(int i=0; i<dist.getAreaCode().size(); i++)	//from 0 to the end of the areas list
 		{
 			row = spreadsheet.createRow(i+1);
 			
 			cell = row.createCell(0);
-			cell.setCellValue(dist.getCourseCode().get(i));
+			cell.setCellValue(dist.getAreaCode().get(i));	//area name
 			
 			cell = row.createCell(1);
-			cell.setCellValue(dist.getOthers().get(i));
+			cell.setCellValue(dist.getOthers().get(i));		//others
 			
 			cell = row.createCell(2);
-			cell.setCellValue(dist.getFails().get(i));
+			cell.setCellValue(dist.getFails().get(i));		//fails
 			
 			cell = row.createCell(3);
-			cell.setCellValue(dist.getMarginals().get(i));
+			cell.setCellValue(dist.getMarginals().get(i));	//marginals
 			
 			cell = row.createCell(4);
-			cell.setCellValue(dist.getMeets().get(i));
+			cell.setCellValue(dist.getMeets().get(i));		//meets
 			
 			cell = row.createCell(5);
-			cell.setCellValue(dist.getExceeds().get(i));
+			cell.setCellValue(dist.getExceeds().get(i));	//exceeds
 		}
 		
 		
