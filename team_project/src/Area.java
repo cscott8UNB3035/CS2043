@@ -20,12 +20,12 @@ public class Area {
 		return areaList;
 	}
 	
-	protected String printAreaList(Area area) {
+	/*protected String printAreaList(Area area) {
 		String list = null;
 		list = area.getAreaName();
 		for(int i = 0; i <= areaList.size(); i++) {
 			list = list + '\n' + area.getAreaList().get(i);
 		}
 		return list;
-	}
+	}*/
 }

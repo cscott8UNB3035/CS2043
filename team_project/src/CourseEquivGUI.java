@@ -39,7 +39,6 @@ public class CourseEquivGUI
 		try 
 		{
 			fis = new FileInputStream(ConfigGUI.getCourseEquivPath());
-			
 			workbook = new XSSFWorkbook(fis);
 			spreadsheet = workbook.getSheetAt(0);
 		}
@@ -441,6 +440,50 @@ public class CourseEquivGUI
 			window2.setTitle("Configuration");
 			window2.showAndWait();
 		}
+	
+	
+	protected static String getEquivalent(String courseCode)
+	{
+		ConfigGUI.openConfig();
+		openCourseEquiv(ConfigGUI.getCourseEquivPath());
+		
+		row = spreadsheet.getRow(0);
+		int maxRow = spreadsheet.getLastRowNum();
+		int maxCell = row.getLastCellNum();
+		
+		
+		
+		for(int i=0; i<maxCell; i++)
+		{
+			try
+			{
+				String a = spreadsheet.getRow(0).getCell(i).getStringCellValue();
+				
+				for(int j=0; j<=maxRow+1; j++)
+				{
+					try
+					{	
+						if(spreadsheet.getRow(j).getCell(i).getStringCellValue().equals(courseCode))
+						{
+							ConfigGUI.closeConfig();
+							return spreadsheet.getRow(0).getCell(i).getStringCellValue();
+						}
+					}
+					catch (NullPointerException endOfColumn)
+					{
+						break;
+					}
+				}	//end inner for-loop
+			}
+			catch(NullPointerException noCell)
+			{
+				continue;
+			}
+		}	//end outer for-loop
+		
+		ConfigGUI.closeConfig();
+		return courseCode;
+	}
 	
 	
 }

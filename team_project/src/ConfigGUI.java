@@ -19,10 +19,6 @@ import javafx.scene.text.TextAlignment;
 import javafx.scene.*;
 import javafx.stage.*;
 
-/*	
- * TODO: Implement methods to modify data
- */
-
 public class ConfigGUI
 {	
 	// ----- Configuration File Variables -----
@@ -62,7 +58,7 @@ public class ConfigGUI
 		
 		try
 		{
-			return prop.getProperty("course_equiv_path") + "course_equivalence_list.xlsx";
+			return prop.getProperty("course_equiv_path");
 		}
 		catch (Exception e)
 		{
@@ -77,7 +73,7 @@ public class ConfigGUI
 	{
 		try
 		{
-			return prop.getProperty("course_areas_path") + "course_areas.xlsx";
+			return prop.getProperty("course_areas_path");
 		}
 		catch (Exception e)
 		{
@@ -112,6 +108,20 @@ public class ConfigGUI
 		catch (Exception e)
 		{
 			AlertBox.displayAlert("Error", "Cannot find Output folder path.");
+			return null;
+		}
+	}
+	
+	
+	protected static String getLevel(String level)
+	{
+		try
+		{
+			return prop.getProperty("level" + level);
+		}
+		catch(Exception e)
+		{
+			AlertBox.displayAlert("Error", "Cannot find specified level.");
 			return null;
 		}
 	}
@@ -159,6 +169,27 @@ public class ConfigGUI
 	}
 	
 	
+	//Universal set-property method
+	protected static void updateProperty(String property, String newValue)
+	{
+		
+	}
+	
+	
+	//Universal get-property method
+	protected static String getProperty(String property)
+	{
+		try
+		{
+			return prop.getProperty(property);
+		}
+		catch (Exception e)
+		{
+			AlertBox.displayAlert("Error", "Cannot find requested property.");
+			return null;
+		}
+	}
+	
 	// ----- GUI Methods -----
 	
 	protected static void showConfig()
@@ -177,7 +208,7 @@ public class ConfigGUI
 		Text configText = new Text();
 		
 		
-		Button changeOutputPath = new Button("Change Output Path");
+		/*Button changeOutputPath = new Button("Change Output Path");
 		changeOutputPath.setMinWidth(130);
 		changeOutputPath.setMaxWidth(130);
 		changeOutputPath.setOnAction(e -> 
@@ -208,7 +239,7 @@ public class ConfigGUI
 		{
 			//changeTranscriptSrc()
 			updateConfigText(configText);
-		});
+		});*/
 		
 		
 		Button back = new Button("Back");
@@ -237,7 +268,8 @@ public class ConfigGUI
 		bottomButtons.setPadding(new Insets(15, 15, 15, 15));
 		bottomButtons.setSpacing(15);
 		bottomButtons.setAlignment(Pos.CENTER);
-		bottomButtons.getChildren().addAll(changeOutputPath, changeCourseEquivSrc, changeTranscriptSrc, back);
+		bottomButtons.getChildren().addAll(back);
+		//bottomButtons.getChildren().addAll(changeOutputPath, changeCourseEquivSrc, changeTranscriptSrc, back);
 		
 		
 		
@@ -248,7 +280,7 @@ public class ConfigGUI
 		
 		
 		
-		scene = new Scene(layout, 550, 500);
+		scene = new Scene(layout, 600, 500);
 		
 		// -------------------------------------
 		

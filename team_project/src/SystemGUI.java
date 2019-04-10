@@ -16,7 +16,10 @@ public class SystemGUI extends Application
 	
 	protected static TranscriptHandler tScriptList;
 	protected static MasterList masterCourseList;
-	protected static Distributions distributions;
+	protected static Distributions rawDistributions;
+	protected static Distributions areaDistributions;
+	protected static Distributions[] distributions = new Distributions[] {rawDistributions, areaDistributions};
+	protected static Area[] areas = null;
 	
 	
 	public static void main(String[] args)
@@ -58,7 +61,7 @@ public class SystemGUI extends Application
 		process.setMaxWidth(130);
 		process.setOnAction(e ->
 		{
-			tScriptList = ProcessInfoGUI.showDataProcessor(tScriptList);
+			tScriptList = ProcessInfoGUI.showDataProcessor(masterCourseList, tScriptList);
 		});
 		
 		
@@ -67,7 +70,7 @@ public class SystemGUI extends Application
 		stats.setMaxWidth(130);
 		stats.setOnAction(e ->
 		{
-			StatsAndAnalysis.showStatistics(tScriptList);
+			distributions = StatsAndAnalysis.showStatistics(tScriptList, distributions, areas, masterCourseList);
 		});
 		
 		
@@ -135,20 +138,19 @@ public class SystemGUI extends Application
 			e.consume();
 			
 			//make sure changes are saved to all files
-			//save tScriptList
+			//save tScriptList?
 			
 			closeProgram();
 		});
 		
 		window.setOnShowing(e -> 
 		{
-			//check if config file is present, if not create one.
-			
-			//ask if user wants to re-use tScriptList
+			//Possible Feature: check if config file is present, if not create one.
+			//Possible Feature: ask if user wants to re-use tScriptList after each session
 			
 			initializeTScriptList();
 			initializeMasterList();
-			initializeRawDistributionsList();
+			initializeAreas();
 		});
 		
 		window.setScene(scene1);
@@ -177,32 +179,16 @@ public class SystemGUI extends Application
 	}
 	
 	
-	private static TranscriptHandler getTScriptList()
-	{
-		return tScriptList;
-	}
-	
-	
 	private static void initializeMasterList()
 	{
 		masterCourseList = new MasterList();
 	}
 	
 	
-	private static MasterList getMasterList()
+	private static void initializeAreas()
 	{
-		return masterCourseList;
+		areas = ImportAreas.importAreas();
 	}
 	
-	
-	protected static void initializeRawDistributionsList()
-	{
-		for(int i=0; i<tScriptList.getSize(); i++)
-		{
-			Transcript t = tScriptList.getTranscript(i);
-			distributions.getRawDistributions(t);
-			System.out.println();
-		}
-	}
 	
 }
