@@ -38,24 +38,33 @@ public class ProcessInfoGUI
 	protected static Transcript readTextFile() {
 		
 		Transcript t = new Transcript();
-		String line, trimLine;
-		String[] fields;
+		String line;
+		String[] row = new String[6];
+		int[] x = new int[]{2,10,	13,18,	20,53,	64,67,	72,76,	82,89};
+		int flg = 0;
 		
 		while(scan.hasNextLine())
 		{
 			try
 			{
 				line=scan.nextLine();
-				trimLine = line.trim();
-				fields = trimLine.split("\\s{2,38}");
-				Course c = new Course(fields[0], fields[1], fields[2], fields[3], fields[4], fields[5]);
+				for(int i=0; i<12; i+=2) {
+					if(flg==0)
+						row[i/2]=line.substring(x[i]-2, x[i+1]-2);
+					else
+						row[i/2]=line.substring(x[i], x[i+1]);
+				}
+				
+				
+				Course c = new Course(row[0], row[1], row[2], row[3], row[4], row[5]);
 				t.add(c);
+				if(flg==0)
+					flg++;
 			}
 			catch(NullPointerException e)
 			{
 				break;
-			}
-					
+			}	
 		}
 		return t;
 	}
