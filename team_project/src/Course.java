@@ -89,4 +89,33 @@ public class Course {
 	{
 		this.cHour = cHour;
 	}
+	
+	public String toString() {
+		String cC, t;
+		
+		if(this.courseCode.length()<8) {
+			cC = this.courseCode;
+			cC=cC+"\t";
+		}
+		else
+			cC=this.getCourseCode();
+		
+		if(this.getTitle().length()<8) {
+			t = this.getTitle();
+			t=t+"\t\t\t";
+		}
+		else if(this.getTitle().length()<16) {
+			t = this.getTitle();
+			t=t+"\t\t";
+		}
+		else if(this.getTitle().length()<24) {
+			t = this.getTitle();
+			t=t+"\t";
+		}
+		else
+			t=this.getTitle();
+		
+		
+		return cC + "\t" + sectionCode + "\t" + t + "\t" + letterGrade + "\t" + creditHour + "\t" + term + "\n";
+	}
 }
