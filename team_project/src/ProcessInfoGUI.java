@@ -47,7 +47,7 @@ public class ProcessInfoGUI
 			{
 				line=scan.nextLine();
 				trimLine = line.trim();
-				fields = trimLine.split("\\s{2,20}");
+				fields = trimLine.split("\\s{2,38}");
 				Course c = new Course(fields[0], fields[1], fields[2], fields[3], fields[4], fields[5]);
 				t.add(c);
 			}
