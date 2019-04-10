@@ -38,9 +38,9 @@ public class ProcessInfoGUI
 	protected static Transcript readTextFile() {
 		
 		Transcript t = new Transcript();
-		String line;
+		String line, temp;
 		String[] row = new String[6];
-		int[] x = new int[]{2,10,	13,18,	20,53,	64,67,	72,76,	82,89};
+		int[] x = new int[]{2,10/*courseCode*/,	13,18/*SectionCode*/,	20,53/*Title*/,	64,67/*LetterGrade*/,	72,76/*creditHour*/,	82,89/*term*/};
 		int flg = 0;
 		
 		while(scan.hasNextLine())
@@ -49,10 +49,13 @@ public class ProcessInfoGUI
 			{
 				line=scan.nextLine();
 				for(int i=0; i<12; i+=2) {
-					if(flg==0)
-						row[i/2]=line.substring(x[i]-2, x[i+1]-2);
+					if(flg==0) {
+						temp=line.substring(x[i]-2, x[i+1]-2);
+						row[i/2]=temp.trim();
+					}
 					else
-						row[i/2]=line.substring(x[i], x[i+1]);
+						temp=line.substring(x[i], x[i+1]);
+					row[i/2]=temp.trim();
 				}
 				
 				
